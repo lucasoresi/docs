@@ -1,0 +1,285 @@
+---
+title: 'Bienvenido a Optacost'
+description: 'Sistema de gestión y optimización de costos para laboratorios de análisis clínicos'
+---
+
+<img
+  className="block dark:hidden"
+  src="/images/hero-light.png"
+  alt="Hero Light"
+/>
+<img
+  className="hidden dark:block"
+  src="/images/hero-dark.png"
+  alt="Hero Dark"
+/>
+
+## ¿Qué es Optacost?
+
+Optacost es una **plataforma integral de gestión de costos** diseñada específicamente para laboratorios de análisis clínicos. Te permite controlar cada aspecto de tu operación: desde el inventario de suministros hasta la facturación por obra social, con análisis en tiempo real y asistencia con inteligencia artificial.
+
+<CardGroup cols={2}>
+  <Card
+    title="Control Total de Costos"
+    icon="calculator"
+    href="/introduccion/que-es-optacost"
+  >
+    Conoce en tiempo real el costo de cada práctica y optimiza tu rentabilidad
+  </Card>
+  <Card
+    title="Gestión de Inventario"
+    icon="boxes-stacked"
+    href="/caracteristicas/suministros"
+  >
+    Administra tu stock, precios y proveedores desde un solo lugar
+  </Card>
+  <Card
+    title="Chatbot con IA"
+    icon="robot"
+    href="/caracteristicas/chatbot-ia"
+  >
+    Consulta tus datos en lenguaje natural con GPT-4o de OpenAI
+  </Card>
+  <Card
+    title="Multi-Tenant"
+    icon="building"
+    href="/arquitectura/multi-tenancy"
+  >
+    Cada laboratorio completamente aislado y seguro
+  </Card>
+</CardGroup>
+
+## Comenzar Rápidamente
+
+<CardGroup cols={2}>
+  <Card
+    title="Guía de Inicio Rápido"
+    icon="rocket"
+    href="/introduccion/inicio-rapido"
+  >
+    Configura tu laboratorio y comienza en 5 minutos
+  </Card>
+  <Card
+    title="Autenticación"
+    icon="key"
+    href="/introduccion/autenticacion"
+  >
+    Aprende sobre usuarios, roles y permisos
+  </Card>
+</CardGroup>
+
+## Características Principales
+
+<AccordionGroup>
+  <Accordion icon="chart-line" title="Dashboard Inteligente">
+    Visualiza tus KPIs principales: facturación, costos, márgenes, prácticas realizadas y tendencias en tiempo real.
+
+    [Ver Dashboard →](/caracteristicas/dashboard)
+  </Accordion>
+
+  <Accordion icon="flask" title="Gestión de Prácticas">
+    Registra cada estudio realizado, asigna suministros automáticamente y calcula costos en tiempo real.
+
+    [Ver Prácticas →](/caracteristicas/practicas)
+  </Accordion>
+
+  <Accordion icon="boxes-stacked" title="Control de Inventario">
+    Mantén tu stock actualizado, recibe alertas de stock bajo y actualiza precios desde tus proveedores.
+
+    [Ver Suministros →](/caracteristicas/suministros)
+  </Accordion>
+
+  <Accordion icon="chart-bar" title="Reportes Personalizados">
+    Genera reportes detallados por periodo, obra social, tipo de práctica o cualquier combinación de filtros.
+
+    [Ver Reportes →](/caracteristicas/reportes)
+  </Accordion>
+
+  <Accordion icon="share-nodes" title="Derivaciones Externas">
+    Gestiona estudios enviados a laboratorios de referencia, controla costos y mantiene el seguimiento.
+
+    [Ver Derivaciones →](/caracteristicas/derivaciones)
+  </Accordion>
+
+  <Accordion icon="robot" title="Asistente con IA">
+    Pregunta sobre tus datos en lenguaje natural: "¿Cuánto gasté en suministros el mes pasado?"
+
+    [Ver Chatbot →](/caracteristicas/chatbot-ia)
+  </Accordion>
+
+  <Accordion icon="server" title="Backups Automáticos">
+    Respaldos diarios automáticos con restauración fácil y almacenamiento seguro.
+
+    [Ver Backups →](/caracteristicas/backups)
+  </Accordion>
+
+  <Accordion icon="plug" title="Integraciones">
+    Conecta con OpenAI, proveedores externos, sistemas de facturación y más.
+
+    [Ver Integraciones →](/caracteristicas/integraciones)
+  </Accordion>
+</AccordionGroup>
+
+## Tecnología de Vanguardia
+
+Optacost está construido con las tecnologías más modernas:
+
+<CardGroup cols={3}>
+  <Card title="Next.js 15" icon="react">
+    Framework React de última generación
+  </Card>
+  <Card title="Supabase" icon="database">
+    Backend as a Service con PostgreSQL
+  </Card>
+  <Card title="OpenAI GPT-4o" icon="brain">
+    Inteligencia artificial conversacional
+  </Card>
+  <Card title="TypeScript" icon="code">
+    Tipado fuerte para mayor confiabilidad
+  </Card>
+  <Card title="Tailwind CSS" icon="palette">
+    Diseño moderno y responsive
+  </Card>
+  <Card title="Vercel" icon="cloud">
+    Deploy instantáneo y escalable
+  </Card>
+</CardGroup>
+
+## API REST Completa
+
+Integra Optacost con tus sistemas existentes usando nuestra API REST:
+
+```bash
+# Ejemplo: Obtener prácticas del mes
+curl -X GET "https://api.optacost.com/v1/practices?month=2024-12" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+<Card
+  title="Documentación de API"
+  icon="code"
+  href="/api-reference/introduccion"
+>
+  Explora todos los endpoints disponibles
+</Card>
+
+## Guías Prácticas
+
+Aprende a usar Optacost con nuestras guías paso a paso:
+
+<CardGroup cols={2}>
+  <Card
+    title="Configurar Integraciones"
+    icon="plug"
+    href="/guias/configurar-integracion"
+  >
+    Conecta OpenAI, proveedores y más
+  </Card>
+  <Card
+    title="Crear Reportes Personalizados"
+    icon="chart-line"
+    href="/guias/crear-reportes-personalizados"
+  >
+    Genera análisis a medida
+  </Card>
+  <Card
+    title="Gestionar Usuarios"
+    icon="users"
+    href="/guias/gestionar-usuarios"
+  >
+    Administra roles y permisos
+  </Card>
+  <Card
+    title="Importar Datos"
+    icon="file-import"
+    href="/guias/importar-datos"
+  >
+    Migra desde otros sistemas
+  </Card>
+</CardGroup>
+
+## Arquitectura y Seguridad
+
+<CardGroup cols={2}>
+  <Card
+    title="Multi-Tenancy"
+    icon="building"
+    href="/arquitectura/multi-tenancy"
+  >
+    Aislamiento completo entre laboratorios
+  </Card>
+  <Card
+    title="Base de Datos"
+    icon="database"
+    href="/arquitectura/base-de-datos"
+  >
+    PostgreSQL con Row Level Security
+  </Card>
+  <Card
+    title="Roles y Permisos"
+    icon="shield-halved"
+    href="/arquitectura/roles-y-permisos"
+  >
+    Control de acceso granular
+  </Card>
+  <Card
+    title="Integración OpenAI"
+    icon="brain"
+    href="/arquitectura/integracion-openai"
+  >
+    Cómo funciona el chatbot con IA
+  </Card>
+</CardGroup>
+
+## Soporte y Comunidad
+
+<CardGroup cols={2}>
+  <Card
+    title="Soporte por Email"
+    icon="envelope"
+    href="mailto:soporte@optacost.com"
+  >
+    Contacta a nuestro equipo de soporte
+  </Card>
+  <Card
+    title="GitHub"
+    icon="github"
+    href="https://github.com/optacost"
+  >
+    Contribuye al proyecto open source
+  </Card>
+</CardGroup>
+
+## Próximos Pasos
+
+<Steps>
+  <Step title="Lee Qué es Optacost">
+    Entiende cómo funciona y qué problemas resuelve
+
+    [Leer más →](/introduccion/que-es-optacost)
+  </Step>
+
+  <Step title="Sigue la Guía de Inicio Rápido">
+    Configura tu laboratorio en minutos
+
+    [Comenzar →](/introduccion/inicio-rapido)
+  </Step>
+
+  <Step title="Explora el Dashboard">
+    Conoce las métricas principales de tu negocio
+
+    [Ver Dashboard →](/caracteristicas/dashboard)
+  </Step>
+
+  <Step title="Usa el Chatbot">
+    Pregunta sobre tus datos en lenguaje natural
+
+    [Probar Chatbot →](/guias/usar-chatbot)
+  </Step>
+</Steps>
+
+---
+
+<Note>
+**¿Necesitas ayuda?** Escríbenos a [soporte@optacost.com](mailto:soporte@optacost.com) o consulta nuestras [guías prácticas](/guias/usar-chatbot).
+</Note>

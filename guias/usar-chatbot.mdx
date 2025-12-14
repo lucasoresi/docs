@@ -1,0 +1,365 @@
+---
+title: 'Usar el Chatbot'
+description: 'Guía completa para aprovechar el asistente con IA de Optacost'
+icon: 'robot'
+---
+
+## Introducción
+
+El chatbot de Optacost usa **GPT-4o de OpenAI** para ayudarte a consultar tus datos, generar análisis y obtener respuestas instantáneas.
+
+<Note>
+El chatbot solo puede acceder a los datos de TU laboratorio. Está protegido por Row Level Security.
+</Note>
+
+## Acceder al Chatbot
+
+<Steps>
+  <Step title="Encuentra el ícono">
+    En la esquina inferior derecha de cualquier página
+  </Step>
+
+  <Step title="Click para abrir">
+    Se abrirá una ventana de chat
+  </Step>
+
+  <Step title="Escribe tu pregunta">
+    Usa lenguaje natural, como le hablarías a un colega
+  </Step>
+
+  <Step title="Recibe la respuesta">
+    El chatbot analizará tus datos y responderá
+  </Step>
+</Steps>
+
+## Qué Puedes Preguntarle
+
+### Consultas Financieras
+
+<AccordionGroup>
+  <Accordion title="Facturación y Costos">
+    ```
+    ¿Cuánto facturé este mes?
+    ¿Cuál fue mi costo total en noviembre?
+    Muéstrame el margen de ganancia del último trimestre
+    ¿Cuánto gané con OSDE en 2024?
+    ```
+
+    Respuesta ejemplo:
+    ```
+    En diciembre 2024 facturaste $116,000 con un costo total
+    de $36,250, resultando en un margen bruto de $79,750
+    (68.75%).
+
+    Desglose por obra social:
+    - OSDE: $42,000 (36%)
+    - Swiss Medical: $35,000 (30%)
+    - Particular: $18,000 (16%)
+    - Otros: $21,000 (18%)
+    ```
+  </Accordion>
+
+  <Accordion title="Análisis de Rentabilidad">
+    ```
+    ¿Cuáles son mis prácticas más rentables?
+    ¿Qué estudios tienen mejor margen porcentual?
+    Compara la rentabilidad de este mes vs el anterior
+    ¿En qué obra social gano más?
+    ```
+  </Accordion>
+
+  <Accordion title="Proyecciones">
+    ```
+    Si sigo a este ritmo, ¿cuánto facturaré este mes?
+    ¿Qué tendencia tienen mis costos?
+    Proyecta mi facturación para fin de año
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### Consultas de Inventario
+
+<AccordionGroup>
+  <Accordion title="Stock y Suministros">
+    ```
+    ¿Qué suministros están por debajo del stock mínimo?
+    ¿Cuánto gasté en tubos EDTA este mes?
+    Muéstrame los 5 suministros más consumidos
+    ¿Tengo stock suficiente de guantes?
+    ```
+
+    Respuesta ejemplo:
+    ```
+    Tienes 3 suministros con stock bajo:
+
+    1. Tubos EDTA 5ml
+       Stock actual: 85 | Stock mínimo: 100
+       Necesitas: 15 unidades
+
+    2. Guantes L
+       Stock actual: 145 | Stock mínimo: 200
+       Necesitas: 55 unidades
+
+    3. Reactivo Hemoglobina
+       Stock actual: 18 | Stock mínimo: 20
+       Necesitas: 2 unidades
+
+    Costo estimado de reposición: $2,450
+    ```
+  </Accordion>
+
+  <Accordion title="Análisis de Consumo">
+    ```
+    ¿Cuál es el suministro que más uso?
+    ¿Cuánto estoy gastando en promedio por práctica?
+    ¿Mi consumo de suministros está aumentando?
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### Consultas de Prácticas
+
+<AccordionGroup>
+  <Accordion title="Estadísticas Generales">
+    ```
+    ¿Cuántas prácticas hice hoy?
+    ¿Cuántos hemogramas hice esta semana?
+    Muéstrame las prácticas del paciente Juan Pérez
+    ¿Cuál es la práctica que más realizo?
+    ```
+  </Accordion>
+
+  <Accordion title="Análisis Temporal">
+    ```
+    ¿Qué día de la semana hago más prácticas?
+    Compara diciembre vs noviembre en cantidad de estudios
+    ¿Estoy haciendo más o menos prácticas que el año pasado?
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### Consultas de Reportes
+
+<AccordionGroup>
+  <Accordion title="Generar Insights">
+    ```
+    Dame un resumen ejecutivo del mes
+    ¿Qué puedo mejorar en mi operación?
+    ¿Hay alguna anomalía en mis datos?
+    Identifica oportunidades de ahorro
+    ```
+
+    Respuesta ejemplo:
+    ```
+    📊 Resumen Ejecutivo - Diciembre 2024
+
+    Métricas Principales:
+    - Prácticas realizadas: 145 (+7% vs nov)
+    - Facturación: $116,000 (+6.9%)
+    - Costos: $36,250 (+6.3%)
+    - Margen: 68.75% (+0.5pp)
+
+    Highlights:
+    ✅ Aumento de rentabilidad
+    ✅ Crecimiento en prácticas de alta gama
+    ⚠️ Stock bajo en 3 suministros críticos
+
+    Oportunidades:
+    1. Hemograma es tu práctica más rentable (75% margen)
+       → Considera promocionarlo más
+    2. Swiss Medical paga 15% menos que OSDE
+       → Renegocia convenio
+    3. Costos de guantes aumentaron 20%
+       → Busca proveedor alternativo
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### Ayuda con el Sistema
+
+```
+¿Cómo creo una nueva práctica?
+¿Cómo actualizo el precio de un suministro?
+¿Puedo exportar mis datos a Excel?
+¿Cómo agrego un nuevo usuario?
+Explícame cómo funcionan los backups
+```
+
+## Capacidades Avanzadas
+
+### Generación de Gráficos
+
+```
+Muéstrame un gráfico de facturación por mes
+Gráfico de barras: top 10 prácticas
+Gráfico circular de distribución por obra social
+```
+
+El chatbot puede sugerir cómo crear visualizaciones en el dashboard.
+
+### Comparativas
+
+```
+Compara mi rendimiento:
+- Este mes vs mes pasado
+- Q4 2024 vs Q4 2023
+- OSDE vs Swiss Medical
+```
+
+### Detección de Anomalías
+
+```
+¿Hay algo inusual en mis datos este mes?
+¿Detectas algún error en mis prácticas?
+¿Hay prácticas con costos muy altos?
+```
+
+## Ejemplos de Conversaciones
+
+### Conversación 1: Análisis Financiero
+
+```
+Usuario: ¿Cuánto facturé este mes?
+
+Chatbot: En diciembre 2024 facturaste $116,000 con 145 prácticas
+realizadas. Esto representa un aumento del 6.9% respecto a
+noviembre ($108,500).
+
+Usuario: ¿Y el margen de ganancia?
+
+Chatbot: Tu margen bruto fue de $79,750 (68.75%). Tus costos
+fueron $36,250. Esto es 0.5 puntos porcentuales mejor que el
+mes pasado (68.25%).
+
+Usuario: ¿Qué obra social me deja más margen?
+
+Chatbot: Analizando por obra social:
+
+1. OSDE: 70.2% de margen
+2. Swiss Medical: 68.0%
+3. Galeno: 67.8%
+4. Particular: 65.5%
+
+OSDE es tu mejor cliente en términos de rentabilidad. Considerando
+que también es el que más volumen te da (36% de tus prácticas),
+es tu obra social más valiosa.
+
+Usuario: Perfecto, gracias
+```
+
+### Conversación 2: Stock y Compras
+
+```
+Usuario: ¿Qué tengo que comprar?
+
+Chatbot: Basándome en tu stock actual vs stock mínimo, necesitas
+reponer 3 suministros:
+
+1. Tubos EDTA 5ml: 15 unidades ($750)
+2. Guantes L: 55 unidades ($825)
+3. Reactivo Hemoglobina: 2 unidades ($360)
+
+Total estimado: $1,935
+
+¿Quieres que te muestre los contactos de tus proveedores?
+
+Usuario: Sí
+
+Chatbot: Aquí están tus proveedores para estos items:
+
+- Tubos EDTA → Proveedor Medical SA
+  Tel: +54 11 1234-5678 | Email: ventas@medicalsa.com
+
+- Guantes → Insumos XYZ
+  Tel: +54 11 8765-4321 | Email: pedidos@insumosxyz.com
+
+- Reactivo → QuímicaPro
+  Tel: +54 11 5555-1234 | Email: comercial@quimicapro.com
+```
+
+### Conversación 3: Optimización
+
+```
+Usuario: ¿Cómo puedo mejorar mi rentabilidad?
+
+Chatbot: Analizando tus datos, identifico 3 oportunidades:
+
+1. 📈 Aumenta hemogramas (tu práctica más rentable)
+   Actualmente: 35 al mes | Margen: 75%
+   Oportunidad: Si haces 50/mes (+$12,000 adicionales)
+
+2. 💰 Renegocia Swiss Medical
+   Pagan 15% menos que OSDE por la misma práctica
+   Oportunidad: +$3,500/mes si igualan a OSDE
+
+3. 📦 Optimiza compra de guantes
+   Precio actual: $15/unidad
+   Compras promedio: 350/mes
+   Oportunidad: Proveedor alternativo a $12/unidad = -$1,050/mes
+
+Total potencial de mejora: +$16,550/mes (14% más)
+
+¿Quieres que profundice en alguna?
+
+Usuario: Cuéntame más de la opción 2
+
+Chatbot: [Análisis detallado...]
+```
+
+## Limitaciones
+
+<Warning>
+El chatbot tiene algunas limitaciones:
+</Warning>
+
+- **No modifica datos**: Solo consulta, no puede crear/editar/eliminar
+- **Solo tu laboratorio**: No puede ver datos de otros usuarios
+- **Datos históricos**: Solo accede a datos ya registrados
+- **Rate limit**: Máximo 10 mensajes por minuto
+- **Timeout**: Queries complejas tienen límite de 5 segundos
+
+## Consejos para Mejores Resultados
+
+<Check>Sé específico con las fechas ("diciembre 2024" mejor que "el mes pasado")</Check>
+<Check>Usa nombres exactos ("Hemograma Completo" mejor que "hemograma")</Check>
+<Check>Pregunta de a una cosa por vez</Check>
+<Check>Si no entendió, reformula la pregunta</Check>
+<Check>Puedes pedirle que explique su respuesta</Check>
+
+## Privacidad y Seguridad
+
+<Info>
+Todos los datos enviados al chatbot están protegidos:
+</Info>
+
+- Encriptación en tránsito (HTTPS)
+- Row Level Security: solo VE tus datos
+- No se comparte información entre laboratorios
+- OpenAI no usa tus datos para entrenar modelos (opt-out)
+- Conversaciones no se comparten con terceros
+
+## Costo del Chatbot
+
+Cada mensaje al chatbot tiene un costo de aproximadamente:
+- Pregunta simple: ~$0.003
+- Pregunta compleja: ~$0.008
+
+Estimación mensual:
+- Uso ligero (50 msgs/mes): ~$0.25
+- Uso moderado (200 msgs/mes): ~$1.20
+- Uso intensivo (1000 msgs/mes): ~$6.00
+
+<Tip>
+Las respuestas comunes están en caché para reducir costos
+</Tip>
+
+## Próximos Pasos
+
+<CardGroup cols={2}>
+  <Card title="Dashboard" icon="chart-line" href="/caracteristicas/dashboard">
+    Visualiza tus métricas principales
+  </Card>
+  <Card title="API del Chatbot" icon="code" href="/api-reference/chatbot/enviar-mensaje">
+    Integra el chatbot en tus propias aplicaciones
+  </Card>
+</CardGroup>

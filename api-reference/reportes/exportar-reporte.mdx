@@ -1,0 +1,62 @@
+---
+title: 'Exportar Reporte'
+api: 'GET /api/reports/:id/download'
+description: 'Descarga un reporte generado previamente'
+---
+
+## Endpoint
+
+```bash
+GET /api/reports/:id/download
+```
+
+## Path Parameters
+
+<ParamField path="id" type="string" required>
+  ID del reporte a descargar
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="formato" type="string">
+  Forzar formato específico: `excel`, `pdf`, `csv`
+</ParamField>
+
+## Request Example
+
+```bash
+GET /api/reports/rep_456/download?formato=excel
+Authorization: Bearer <token>
+```
+
+## Response
+
+Devuelve el archivo binario con los headers apropiados:
+
+```
+Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+Content-Disposition: attachment; filename="reporte-diciembre-2024.xlsx"
+```
+
+## Formatos Disponibles
+
+<CardGroup cols={3}>
+  <Card title="Excel" icon="file-excel">
+    XLSX con múltiples hojas y gráficos
+  </Card>
+  <Card title="PDF" icon="file-pdf">
+    PDF profesional listo para imprimir
+  </Card>
+  <Card title="CSV" icon="file-csv">
+    Datos crudos separados por comas
+  </Card>
+</CardGroup>
+
+## Códigos de Respuesta
+
+| Código | Descripción |
+|--------|-------------|
+| 200 | Archivo descargado |
+| 401 | No autenticado |
+| 404 | Reporte no encontrado |
+| 500 | Error del servidor |

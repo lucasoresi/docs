@@ -1,0 +1,408 @@
+---
+title: Introducción a la API
+description: API RESTful de Optacost para integración de sistemas
+---
+
+## API REST de Optacost
+
+La API de Optacost permite integrar tu sistema de gestión con aplicaciones externas, automatizar procesos y acceder a datos programáticamente.
+
+## Base URL
+
+Todas las peticiones a la API deben usar la siguiente estructura:
+
+```bash
+https://{subdomain}.app.optacost.com/api
+```
+
+<Info>
+Reemplaza `{subdomain}` con el subdominio de tu organización (ej: `mi-laboratorio`)
+</Info>
+
+## Autenticación
+
+### Bearer Token
+
+Todas las peticiones requieren un token JWT en el header `Authorization`:
+
+```bash
+curl -X GET \
+  https://mi-laboratorio.app.optacost.com/api/practices \
+  -H 'Authorization: Bearer {tu_token_jwt}'
+```
+
+### Obtener Token
+
+<CodeGroup>
+
+```typescript TypeScript/JavaScript
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+  'https://your-project.supabase.co',
+  'your-anon-key'
+)
+
+// Login
+const { data, error } = await supabase.auth.signInWithPassword({
+  email: 'usuario@laboratorio.com',
+  password: 'contraseña'
+})
+
+const token = data.session?.access_token
+```
+
+```python Python
+import requests
+
+# Login endpoint
+url = "https://mi-laboratorio.app.optacost.com/api/auth/login"
+payload = {
+    "email": "usuario@laboratorio.com",
+    "password": "contraseña"
+}
+
+response = requests.post(url, json=payload)
+token = response.json()['access_token']
+
+# Usar token en requests
+headers = {'Authorization': f'Bearer {token}'}
+```
+
+```php PHP
+<?php
+$url = "https://mi-laboratorio.app.optacost.com/api/auth/login";
+
+$data = [
+    'email' => 'usuario@laboratorio.com',
+    'password' => 'contraseña'
+];
+
+$options = [
+    'http' => [
+        'method' => 'POST',
+        'header' => 'Content-Type: application/json',
+        'content' => json_encode($data)
+    ]
+];
+
+$context = stream_context_create($options);
+$result = file_get_contents($url, false, $context);
+$response = json_decode($result);
+
+$token = $response->access_token;
+?>
+```
+
+</CodeGroup>
+
+## Rate Limiting
+
+Para garantizar la disponibilidad del servicio, la API tiene límites de peticiones:
+
+| Plan | Requests/minuto | Requests/día |
+|------|----------------|--------------|
+| **Básico** | 60 | 5,000 |
+| **Pro** | 120 | 15,000 |
+| **Enterprise** | 300 | 50,000 |
+
+### Headers de Rate Limit
+
+Cada respuesta incluye headers informativos:
+
+```bash
+X-RateLimit-Limit: 120
+X-RateLimit-Remaining: 115
+X-RateLimit-Reset: 1640000000
+```
+
+## Formato de Respuestas
+
+### Respuesta Exitosa
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": 123,
+    "nombre": "Hemograma Completo",
+    "codigo": "LAB001"
+  },
+  "meta": {
+    "timestamp": "2024-12-13T10:30:00Z"
+  }
+}
+```
+
+### Respuesta con Paginación
+
+```json
+{
+  "success": true,
+  "data": [...],
+  "pagination": {
+    "page": 1,
+    "per_page": 20,
+    "total": 156,
+    "total_pages": 8
+  }
+}
+```
+
+### Respuesta de Error
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "PRACTICE_NOT_FOUND",
+    "message": "La práctica con ID 999 no existe",
+    "details": {
+      "practice_id": 999
+    }
+  },
+  "meta": {
+    "timestamp": "2024-12-13T10:30:00Z"
+  }
+}
+```
+
+## Códigos de Estado HTTP
+
+| Código | Significado | Uso |
+|--------|-------------|-----|
+| **200** | OK | Petición exitosa |
+| **201** | Created | Recurso creado exitosamente |
+| **204** | No Content | Petición exitosa sin contenido |
+| **400** | Bad Request | Parámetros inválidos |
+| **401** | Unauthorized | Token inválido o expirado |
+| **403** | Forbidden | Sin permisos para la acción |
+| **404** | Not Found | Recurso no encontrado |
+| **422** | Unprocessable Entity | Validación fallida |
+| **429** | Too Many Requests | Rate limit excedido |
+| **500** | Internal Server Error | Error del servidor |
+
+## Códigos de Error Personalizados
+
+| Código | Descripción |
+|--------|-------------|
+| `INVALID_TOKEN` | Token JWT inválido o expirado |
+| `INSUFFICIENT_PERMISSIONS` | Usuario sin permisos |
+| `PRACTICE_NOT_FOUND` | Práctica no encontrada |
+| `SUPPLY_NOT_FOUND` | Suministro no encontrado |
+| `DUPLICATE_CODE` | Código duplicado |
+| `VALIDATION_ERROR` | Error de validación de datos |
+| `RATE_LIMIT_EXCEEDED` | Límite de peticiones excedido |
+
+## Paginación
+
+Endpoints que retornan listas soportan paginación:
+
+### Parámetros
+
+```bash
+GET /api/practices?page=2&per_page=50
+```
+
+| Parámetro | Tipo | Default | Descripción |
+|-----------|------|---------|-------------|
+| `page` | integer | 1 | Número de página |
+| `per_page` | integer | 20 | Elementos por página (máx: 100) |
+
+### Ejemplo de Respuesta
+
+```json
+{
+  "data": [...],
+  "pagination": {
+    "page": 2,
+    "per_page": 50,
+    "total": 234,
+    "total_pages": 5,
+    "has_next": true,
+    "has_prev": true
+  }
+}
+```
+
+## Filtrado y Búsqueda
+
+### Query Parameters
+
+La mayoría de endpoints soportan filtrado:
+
+```bash
+GET /api/practices?search=hemograma&active=true&min_price=1000
+```
+
+| Parámetro | Tipo | Descripción |
+|-----------|------|-------------|
+| `search` | string | Búsqueda de texto libre |
+| `active` | boolean | Filtrar por estado activo |
+| `min_price` | number | Precio mínimo |
+| `max_price` | number | Precio máximo |
+| `laboratory_id` | integer | Filtrar por laboratorio |
+
+## Ordenamiento
+
+Especifica el orden de los resultados:
+
+```bash
+GET /api/practices?sort=precio&order=desc
+```
+
+| Parámetro | Valores | Default |
+|-----------|---------|---------|
+| `sort` | Campo para ordenar | `created_at` |
+| `order` | `asc`, `desc` | `asc` |
+
+## Campos Seleccionables
+
+Optimiza las respuestas seleccionando campos específicos:
+
+```bash
+GET /api/practices?fields=id,codigo,nombre,precio
+```
+
+**Respuesta:**
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "codigo": "LAB001",
+      "nombre": "Hemograma",
+      "precio": 1800
+    }
+  ]
+}
+```
+
+## Webhooks
+
+Configura webhooks para recibir notificaciones de eventos:
+
+### Eventos Disponibles
+
+- `practice.created` - Nueva práctica creada
+- `practice.updated` - Práctica actualizada
+- `practice.deleted` - Práctica eliminada
+- `supply.created` - Nuevo suministro
+- `supply.updated` - Suministro actualizado
+- `price.changed` - Cambio de precio
+- `backup.completed` - Backup completado
+
+### Configurar Webhook
+
+```bash
+POST /api/webhooks
+```
+
+```json
+{
+  "url": "https://tu-app.com/webhook",
+  "events": ["practice.created", "price.changed"],
+  "secret": "tu_secret_para_validacion"
+}
+```
+
+## Versionado de API
+
+La API usa versionado en la URL:
+
+```bash
+https://mi-laboratorio.app.optacost.com/api/v1/practices
+```
+
+### Versiones
+
+- **v1** (actual): Versión estable
+- **v2** (beta): Próxima versión con nuevas features
+
+## SDKs Oficiales
+
+<CardGroup cols={2}>
+  <Card title="JavaScript/TypeScript" icon="js">
+    ```bash
+    npm install @optacost/sdk
+    ```
+  </Card>
+  <Card title="Python" icon="python">
+    ```bash
+    pip install optacost
+    ```
+  </Card>
+  <Card title="PHP" icon="php">
+    ```bash
+    composer require optacost/sdk
+    ```
+  </Card>
+  <Card title="C#/.NET" icon="microsoft">
+    ```bash
+    dotnet add package Optacost.SDK
+    ```
+  </Card>
+</CardGroup>
+
+## Ambientes
+
+### Producción
+
+```
+https://{subdomain}.app.optacost.com/api
+```
+
+### Desarrollo (Sandbox)
+
+```
+https://{subdomain}.sandbox.optacost.com/api
+```
+
+<Warning>
+Los datos en sandbox son de prueba y se resetean periódicamente
+</Warning>
+
+## Postman Collection
+
+Descarga la colección de Postman para probar la API:
+
+<Card
+  title="Descargar Colección de Postman"
+  icon="download"
+  href="#"
+>
+  Incluye todos los endpoints con ejemplos
+</Card>
+
+## Próximos Pasos
+
+<CardGroup cols={2}>
+  <Card
+    title="Autenticación"
+    icon="key"
+    href="/api-reference/autenticacion"
+  >
+    Detalles completos de autenticación
+  </Card>
+  <Card
+    title="API de Prácticas"
+    icon="flask"
+    href="/api-reference/practicas/listar-practicas"
+  >
+    Endpoints de gestión de prácticas
+  </Card>
+  <Card
+    title="API de Suministros"
+    icon="box"
+    href="/api-reference/suministros/listar-suministros"
+  >
+    Endpoints de inventario
+  </Card>
+  <Card
+    title="Chatbot API"
+    icon="robot"
+    href="/api-reference/chatbot/enviar-mensaje"
+  >
+    Integra el chatbot IA
+  </Card>
+</CardGroup>

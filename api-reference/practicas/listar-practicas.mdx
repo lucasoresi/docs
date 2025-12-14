@@ -1,0 +1,160 @@
+---
+title: 'Listar Prácticas'
+api: 'GET /api/practices'
+description: 'Obtiene la lista de prácticas médicas con filtros opcionales'
+---
+
+## Endpoint
+
+```bash
+GET /api/practices
+```
+
+## Autenticación
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token obtenido del login
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="month" type="string">
+  Filtrar por mes (formato: YYYY-MM)
+
+  Ejemplo: `2024-12`
+</ParamField>
+
+<ParamField query="obra_social" type="string">
+  Filtrar por obra social
+
+  Ejemplo: `OSDE`
+</ParamField>
+
+<ParamField query="tipo_practica" type="string">
+  Filtrar por tipo de práctica
+
+  Ejemplo: `Hemograma`
+</ParamField>
+
+<ParamField query="lab_id" type="string">
+  ID del laboratorio (automático según usuario autenticado)
+</ParamField>
+
+<ParamField query="limit" type="number" default="50">
+  Cantidad máxima de resultados
+</ParamField>
+
+<ParamField query="offset" type="number" default="0">
+  Offset para paginación
+</ParamField>
+
+## Request Example
+
+```bash
+GET /api/practices?month=2024-12&obra_social=OSDE&limit=10
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+## Response
+
+<ResponseField name="practices" type="array">
+  Lista de prácticas médicas
+
+  <Expandable title="practice object">
+    <ResponseField name="id" type="string">
+      ID único de la práctica
+    </ResponseField>
+
+    <ResponseField name="fecha" type="string">
+      Fecha de realización (ISO 8601)
+    </ResponseField>
+
+    <ResponseField name="tipo_practica" type="string">
+      Nombre de la práctica médica
+    </ResponseField>
+
+    <ResponseField name="obra_social" type="string">
+      Obra social o prestador
+    </ResponseField>
+
+    <ResponseField name="costo_suministros" type="number">
+      Costo total de suministros utilizados
+    </ResponseField>
+
+    <ResponseField name="precio_facturado" type="number">
+      Precio facturado al paciente/obra social
+    </ResponseField>
+
+    <ResponseField name="margen" type="number">
+      Diferencia entre precio y costo
+    </ResponseField>
+
+    <ResponseField name="supplies_used" type="array">
+      Lista de suministros utilizados
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="total" type="number">
+  Cantidad total de prácticas (sin limit)
+</ResponseField>
+
+<ResponseField name="pagination" type="object">
+  Información de paginación
+
+  <Expandable title="pagination">
+    <ResponseField name="limit" type="number">
+      Límite aplicado
+    </ResponseField>
+
+    <ResponseField name="offset" type="number">
+      Offset aplicado
+    </ResponseField>
+
+    <ResponseField name="has_more" type="boolean">
+      Si hay más resultados
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+### Example Response
+
+```json
+{
+  "practices": [
+    {
+      "id": "pract_123",
+      "fecha": "2024-12-01T10:30:00Z",
+      "tipo_practica": "Hemograma Completo",
+      "obra_social": "OSDE",
+      "paciente": "Juan Pérez",
+      "costo_suministros": 250.00,
+      "precio_facturado": 800.00,
+      "margen": 550.00,
+      "supplies_used": [
+        {
+          "supply_id": "sup_001",
+          "nombre": "Tubo EDTA",
+          "cantidad": 1,
+          "costo_unitario": 50.00
+        }
+      ]
+    }
+  ],
+  "total": 145,
+  "pagination": {
+    "limit": 10,
+    "offset": 0,
+    "has_more": true
+  }
+}
+```
+
+## Códigos de Respuesta
+
+| Código | Descripción |
+|--------|-------------|
+| 200 | Éxito |
+| 401 | No autenticado |
+| 403 | Sin permisos |
+| 500 | Error del servidor |

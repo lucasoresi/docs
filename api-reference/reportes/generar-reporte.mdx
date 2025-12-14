@@ -1,0 +1,100 @@
+---
+title: 'Generar Reporte'
+api: 'POST /api/reports/generate'
+description: 'Genera un reporte completo con los filtros especificados'
+---
+
+## Endpoint
+
+```bash
+POST /api/reports/generate
+```
+
+## Body Parameters
+
+<ParamField body="tipo" type="string" required>
+  Tipo de reporte: `general`, `obra_social`, `consumos`, `costos`
+</ParamField>
+
+<ParamField body="periodo" type="object" required>
+  Rango de fechas del reporte
+
+  <Expandable title="periodo">
+    <ParamField body="desde" type="string" required>
+      Fecha inicial (ISO 8601)
+    </ParamField>
+
+    <ParamField body="hasta" type="string" required>
+      Fecha final (ISO 8601)
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="filtros" type="object">
+  Filtros opcionales
+
+  <Expandable title="filtros">
+    <ParamField body="obra_social" type="string">
+      Filtrar por obra social
+    </ParamField>
+
+    <ParamField body="tipo_practica" type="string">
+      Filtrar por tipo de práctica
+    </ParamField>
+
+    <ParamField body="profesional" type="string">
+      Filtrar por profesional
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="formato" type="string" default="json">
+  Formato de salida: `json`, `excel`, `pdf`, `csv`
+</ParamField>
+
+## Request Example
+
+```bash
+POST /api/reports/generate
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "tipo": "general",
+  "periodo": {
+    "desde": "2024-12-01T00:00:00Z",
+    "hasta": "2024-12-31T23:59:59Z"
+  },
+  "filtros": {
+    "obra_social": "OSDE"
+  },
+  "formato": "excel"
+}
+```
+
+## Response
+
+```json
+{
+  "report_id": "rep_456",
+  "status": "completed",
+  "created_at": "2024-12-13T12:30:00Z",
+  "data": {
+    "total_practicas": 145,
+    "costo_total": 36250.00,
+    "facturacion_total": 116000.00,
+    "margen_total": 79750.00,
+    "margen_porcentaje": 68.75
+  },
+  "download_url": "/api/reports/rep_456/download"
+}
+```
+
+## Códigos de Respuesta
+
+| Código | Descripción |
+|--------|-------------|
+| 200 | Reporte generado |
+| 400 | Parámetros inválidos |
+| 401 | No autenticado |
+| 500 | Error del servidor |

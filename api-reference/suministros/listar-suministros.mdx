@@ -1,0 +1,57 @@
+---
+title: 'Listar Suministros'
+api: 'GET /api/supplies'
+description: 'Obtiene el inventario completo de suministros con filtros'
+---
+
+## Endpoint
+
+```bash
+GET /api/supplies
+```
+
+## Query Parameters
+
+<ParamField query="search" type="string">
+  Buscar por nombre o código
+</ParamField>
+
+<ParamField query="categoria" type="string">
+  Filtrar por categoría
+</ParamField>
+
+<ParamField query="stock_bajo" type="boolean">
+  Solo suministros con stock bajo
+</ParamField>
+
+<ParamField query="limit" type="number" default="100">
+  Cantidad máxima de resultados
+</ParamField>
+
+## Request Example
+
+```bash
+GET /api/supplies?stock_bajo=true&limit=20
+Authorization: Bearer <token>
+```
+
+## Response
+
+```json
+{
+  "supplies": [
+    {
+      "id": "sup_001",
+      "nombre": "Tubo EDTA 5ml",
+      "codigo": "EDTA-5",
+      "categoria": "Tubos",
+      "stock_actual": 85,
+      "stock_minimo": 100,
+      "precio_unitario": 50.00,
+      "proveedor": "Proveedor Medical SA",
+      "ultima_actualizacion": "2024-12-01T10:00:00Z"
+    }
+  ],
+  "total": 45
+}
+```

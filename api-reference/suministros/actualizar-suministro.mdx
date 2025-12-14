@@ -1,0 +1,60 @@
+---
+title: 'Actualizar Suministro'
+api: 'PATCH /api/supplies/:id'
+description: 'Modifica los datos de un suministro existente'
+---
+
+## Endpoint
+
+```bash
+PATCH /api/supplies/:id
+```
+
+## Path Parameters
+
+<ParamField path="id" type="string" required>
+  ID del suministro
+</ParamField>
+
+## Body Parameters
+
+<ParamField body="nombre" type="string">
+  Nombre del suministro
+</ParamField>
+
+<ParamField body="stock_actual" type="number">
+  Actualizar stock actual
+</ParamField>
+
+<ParamField body="stock_minimo" type="number">
+  Stock mínimo para alertas
+</ParamField>
+
+<ParamField body="precio_unitario" type="number">
+  Precio por unidad
+</ParamField>
+
+## Request Example
+
+```bash
+PATCH /api/supplies/sup_123
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "precio_unitario": 55.00,
+  "stock_actual": 250
+}
+```
+
+## Response
+
+```json
+{
+  "id": "sup_123",
+  "updated_at": "2024-12-13T12:00:00Z",
+  "nombre": "Tubo EDTA 5ml",
+  "precio_unitario": 55.00,
+  "stock_actual": 250
+}
+```

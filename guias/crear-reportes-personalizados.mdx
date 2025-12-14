@@ -1,0 +1,345 @@
+---
+title: 'Crear Reportes Personalizados'
+description: 'Genera reportes a medida con filtros avanzados y visualizaciones'
+icon: 'chart-line'
+---
+
+## Introducción
+
+Los reportes personalizados te permiten analizar tus datos exactamente como necesitas, con filtros específicos y formatos variados.
+
+## Tipos de Reportes
+
+<CardGroup cols={2}>
+  <Card title="Reporte General" icon="file-lines">
+    Vista completa de prácticas por periodo
+  </Card>
+  <Card title="Por Obra Social" icon="hospital">
+    Análisis por prestador de salud
+  </Card>
+  <Card title="De Consumos" icon="cart-shopping">
+    Suministros más utilizados
+  </Card>
+  <Card title="Financiero" icon="money-bill-trend-up">
+    Costos, facturación y márgenes
+  </Card>
+</CardGroup>
+
+## Crear un Reporte General
+
+### Paso 1: Acceder al Módulo
+
+<Steps>
+  <Step title="Navega a Reportes">
+    En el menú principal, click en "Reportes"
+  </Step>
+
+  <Step title="Nuevo Reporte">
+    Click en "Generar Nuevo Reporte"
+  </Step>
+
+  <Step title="Selecciona tipo">
+    Elige "Reporte General"
+  </Step>
+</Steps>
+
+### Paso 2: Configurar Filtros
+
+<Tabs>
+  <Tab title="Por Periodo">
+    **Opciones de periodo:**
+
+    - Últimos 7 días
+    - Mes actual
+    - Mes anterior
+    - Año actual
+    - Personalizado (elige fecha inicio y fin)
+
+    ```typescript
+    {
+      periodo: "personalizado",
+      desde: "2024-11-01",
+      hasta: "2024-11-30"
+    }
+    ```
+  </Tab>
+
+  <Tab title="Por Obra Social">
+    Filtra por uno o varios prestadores:
+
+    - Selecciona "Todas" para incluir todas
+    - O elige específicas: OSDE, Swiss Medical, etc.
+
+    ```typescript
+    {
+      obras_sociales: ["OSDE", "Swiss Medical"]
+    }
+    ```
+  </Tab>
+
+  <Tab title="Por Tipo de Práctica">
+    Filtra por estudios específicos:
+
+    - Hemograma
+    - Orina completa
+    - Glucemia
+    - Etc.
+
+    ```typescript
+    {
+      tipos_practica: ["Hemograma", "Glucemia"]
+    }
+    ```
+  </Tab>
+
+  <Tab title="Por Profesional">
+    Si tienes varios operadores:
+
+    ```typescript
+    {
+      profesional: "Dr. Juan Pérez"
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### Paso 3: Seleccionar Métricas
+
+Elige qué datos quieres ver en el reporte:
+
+<Check>Cantidad de prácticas</Check>
+<Check>Costo total de suministros</Check>
+<Check>Facturación total</Check>
+<Check>Margen de ganancia</Check>
+<Check>Margen porcentual</Check>
+<Check>Top 10 prácticas más realizadas</Check>
+<Check>Top 10 suministros más consumidos</Check>
+<Check>Distribución por obra social</Check>
+
+### Paso 4: Elegir Formato
+
+<CardGroup cols={3}>
+  <Card title="Excel" icon="file-excel">
+    **Incluye:**
+    - Múltiples hojas (resumen, detalle, gráficos)
+    - Tablas dinámicas
+    - Gráficos integrados
+    - Formato profesional
+  </Card>
+
+  <Card title="PDF" icon="file-pdf">
+    **Ideal para:**
+    - Presentaciones
+    - Impresión
+    - Compartir por email
+    - Archivo oficial
+  </Card>
+
+  <Card title="CSV" icon="file-csv">
+    **Útil para:**
+    - Importar a otros sistemas
+    - Análisis en Excel/Google Sheets
+    - Procesamiento automatizado
+  </Card>
+</CardGroup>
+
+### Paso 5: Generar y Descargar
+
+<Steps>
+  <Step title="Click en Generar">
+    El sistema procesará tu reporte (puede tardar unos segundos)
+  </Step>
+
+  <Step title="Vista previa">
+    Revisa los datos en pantalla antes de descargar
+  </Step>
+
+  <Step title="Descargar">
+    Click en "Descargar" en el formato que elegiste
+  </Step>
+
+  <Step title="Guardar (opcional)">
+    Puedes guardar la configuración del reporte para ejecutarlo nuevamente
+  </Step>
+</Steps>
+
+## Ejemplo: Reporte Mensual de Rentabilidad
+
+Vamos a crear un reporte que muestre la rentabilidad del mes:
+
+### Configuración
+
+```json
+{
+  "nombre": "Rentabilidad Mensual",
+  "tipo": "financiero",
+  "periodo": {
+    "tipo": "mes_actual"
+  },
+  "metricas": [
+    "total_facturado",
+    "total_costos",
+    "margen_bruto",
+    "margen_porcentaje",
+    "practicas_mas_rentables",
+    "practicas_menos_rentables"
+  ],
+  "agrupacion": "por_obra_social",
+  "visualizacion": [
+    "grafico_barras_facturacion",
+    "grafico_circular_distribucion",
+    "grafico_lineas_tendencia"
+  ],
+  "formato": "excel"
+}
+```
+
+### Resultado Esperado
+
+El reporte incluirá:
+
+1. **Hoja de Resumen**
+   - Total facturado: $116,000
+   - Total costos: $36,250
+   - Margen bruto: $79,750
+   - Margen %: 68.75%
+
+2. **Hoja de Detalle por Obra Social**
+   | Obra Social | Prácticas | Facturación | Costos | Margen % |
+   |-------------|-----------|-------------|---------|----------|
+   | OSDE | 45 | $42,000 | $12,500 | 70.2% |
+   | Swiss Medical | 38 | $35,000 | $11,200 | 68.0% |
+   | Particular | 25 | $18,000 | $5,800 | 67.8% |
+
+3. **Hoja de Top Prácticas**
+   - Más rentables (por margen %)
+   - Más realizadas (por cantidad)
+   - Más facturadas (por monto total)
+
+4. **Gráficos**
+   - Barras: Facturación por obra social
+   - Circular: Distribución de prácticas
+   - Líneas: Tendencia de margen en el tiempo
+
+## Reportes Programados
+
+Configura reportes que se generen automáticamente:
+
+### Crear Reporte Automático
+
+<Steps>
+  <Step title="Configura tu reporte">
+    Sigue los pasos anteriores para crear el reporte
+  </Step>
+
+  <Step title="Activa 'Programar'">
+    En la pantalla de configuración, activa la opción "Programar automáticamente"
+  </Step>
+
+  <Step title="Elige frecuencia">
+    - Diario (lunes a viernes)
+    - Semanal (cada lunes)
+    - Mensual (primer día del mes)
+    - Personalizado
+  </Step>
+
+  <Step title="Configura destinatarios">
+    Agrega los emails que recibirán el reporte
+
+    ```
+    admin@tulab.com
+    contador@tulab.com
+    ```
+  </Step>
+
+  <Step title="Guardar">
+    El sistema enviará el reporte automáticamente
+  </Step>
+</Steps>
+
+<Note>
+Los reportes programados se envían por email con el archivo adjunto
+</Note>
+
+## Plantillas de Reportes
+
+Guarda tus configuraciones como plantillas:
+
+### Crear Plantilla
+
+1. Configura tu reporte perfecto
+2. Click en "Guardar como plantilla"
+3. Dale un nombre: "Reporte Mensual Completo"
+4. La próxima vez, selecciona la plantilla y solo ajusta las fechas
+
+### Plantillas Recomendadas
+
+<AccordionGroup>
+  <Accordion title="Cierre Mensual">
+    - Periodo: Mes completo
+    - Métricas: Todas
+    - Formato: Excel + PDF
+    - Agrupación: Por obra social y por práctica
+  </Accordion>
+
+  <Accordion title="Control Semanal">
+    - Periodo: Últimos 7 días
+    - Métricas: Cantidad, facturación, costos
+    - Formato: PDF
+    - Visualización: Gráficos de tendencia
+  </Accordion>
+
+  <Accordion title="Análisis de Suministros">
+    - Periodo: Mes actual
+    - Métricas: Consumo de suministros
+    - Formato: Excel
+    - Detalle: Stock consumido vs stock disponible
+  </Accordion>
+
+  <Accordion title="Rentabilidad por Práctica">
+    - Agrupación: Por tipo de práctica
+    - Métricas: Margen bruto y porcentual
+    - Ordenar: Por margen % descendente
+    - Formato: CSV para análisis
+  </Accordion>
+</AccordionGroup>
+
+## Análisis Avanzados
+
+### Comparativas entre Periodos
+
+Compara mes a mes para ver evolución:
+
+```json
+{
+  "tipo": "comparativo",
+  "periodos": [
+    { "nombre": "Este mes", "desde": "2024-12-01", "hasta": "2024-12-31" },
+    { "nombre": "Mes pasado", "desde": "2024-11-01", "hasta": "2024-11-30" }
+  ],
+  "metricas": ["facturacion", "costos", "margen"],
+  "mostrar": "variacion_porcentual"
+}
+```
+
+Resultado:
+
+| Métrica | Este Mes | Mes Pasado | Variación |
+|---------|----------|------------|-----------|
+| Facturación | $116,000 | $108,500 | +6.9% ✅ |
+| Costos | $36,250 | $34,100 | +6.3% ⚠️ |
+| Margen | $79,750 | $74,400 | +7.2% ✅ |
+
+## Exportar a Google Sheets
+
+Conecta tu reporte directamente a Google Sheets:
+
+1. Genera el reporte en formato CSV
+2. En Google Sheets: File → Import → Upload
+3. El sheet se actualizará cada vez que generes el reporte
+
+## Próximos Pasos
+
+<Card title="Gestionar Usuarios" icon="users" href="/guias/gestionar-usuarios">
+  Aprende a administrar usuarios y permisos en tu laboratorio
+</Card>

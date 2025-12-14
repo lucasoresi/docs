@@ -1,0 +1,156 @@
+---
+title: 'Crear Práctica'
+api: 'POST /api/practices'
+description: 'Registra una nueva práctica médica en el sistema'
+---
+
+## Endpoint
+
+```bash
+POST /api/practices
+```
+
+## Autenticación
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token obtenido del login
+</ParamField>
+
+## Body Parameters
+
+<ParamField body="tipo_practica" type="string" required>
+  Nombre de la práctica médica
+</ParamField>
+
+<ParamField body="obra_social" type="string" required>
+  Obra social o prestador de salud
+</ParamField>
+
+<ParamField body="paciente" type="string" required>
+  Nombre del paciente
+</ParamField>
+
+<ParamField body="fecha" type="string" default="now">
+  Fecha de realización (ISO 8601). Por defecto: fecha actual
+</ParamField>
+
+<ParamField body="supplies" type="array" required>
+  Lista de suministros utilizados
+
+  <Expandable title="supply object">
+    <ParamField body="supply_id" type="string" required>
+      ID del suministro
+    </ParamField>
+
+    <ParamField body="cantidad" type="number" required>
+      Cantidad utilizada
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="precio_facturado" type="number">
+  Precio facturado. Si no se envía, se calcula automáticamente según el convenio
+</ParamField>
+
+<ParamField body="notas" type="string">
+  Observaciones adicionales
+</ParamField>
+
+## Request Example
+
+```bash
+POST /api/practices
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+
+{
+  "tipo_practica": "Hemograma Completo",
+  "obra_social": "OSDE",
+  "paciente": "María González",
+  "fecha": "2024-12-13T10:30:00Z",
+  "supplies": [
+    {
+      "supply_id": "sup_001",
+      "cantidad": 1
+    },
+    {
+      "supply_id": "sup_015",
+      "cantidad": 2
+    }
+  ],
+  "precio_facturado": 800.00,
+  "notas": "Paciente en ayuno"
+}
+```
+
+## Response
+
+<ResponseField name="id" type="string">
+  ID único de la práctica creada
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  Timestamp de creación
+</ResponseField>
+
+<ResponseField name="costo_calculado" type="number">
+  Costo total de suministros calculado automáticamente
+</ResponseField>
+
+<ResponseField name="margen" type="number">
+  Margen de ganancia (precio - costo)
+</ResponseField>
+
+### Example Response
+
+```json
+{
+  "id": "pract_789",
+  "created_at": "2024-12-13T10:30:00Z",
+  "tipo_practica": "Hemograma Completo",
+  "obra_social": "OSDE",
+  "paciente": "María González",
+  "costo_calculado": 150.00,
+  "precio_facturado": 800.00,
+  "margen": 650.00,
+  "supplies_used": [
+    {
+      "supply_id": "sup_001",
+      "nombre": "Tubo EDTA",
+      "cantidad": 1,
+      "costo_unitario": 50.00
+    },
+    {
+      "supply_id": "sup_015",
+      "nombre": "Guantes",
+      "cantidad": 2,
+      "costo_unitario": 50.00
+    }
+  ]
+}
+```
+
+## Validaciones
+
+<Warning>
+El sistema valida que haya stock suficiente de cada suministro antes de crear la práctica
+</Warning>
+
+- Todos los suministros deben existir
+- Debe haber stock suficiente
+- El precio facturado debe ser mayor a 0
+- La fecha no puede ser futura
+
+## Efecto en el Stock
+
+Al crear una práctica, el stock de cada suministro se **reduce automáticamente** según la cantidad utilizada.
+
+## Códigos de Respuesta
+
+| Código | Descripción |
+|--------|-------------|
+| 201 | Práctica creada exitosamente |
+| 400 | Datos inválidos |
+| 401 | No autenticado |
+| 409 | Stock insuficiente |
+| 500 | Error del servidor |

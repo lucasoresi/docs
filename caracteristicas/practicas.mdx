@@ -1,0 +1,367 @@
+---
+title: Prácticas Médicas
+description: Gestión completa de procedimientos médicos, precios y relaciones
+---
+
+## ¿Qué son las Prácticas?
+
+Las **prácticas** son procedimientos médicos o estudios clínicos que tu laboratorio realiza. Cada práctica tiene asociados:
+
+- **Código único** (nomenclador)
+- **Nombre descriptivo**
+- **Precio/costo**
+- **Suministros necesarios**
+- **Relaciones con otras prácticas**
+
+## Gestión de Prácticas
+
+### Crear Nueva Práctica
+
+<Steps>
+  <Step title="Acceder al módulo">
+    Menú lateral → "Prácticas" → Botón "Nueva Práctica"
+  </Step>
+  <Step title="Información básica">
+    - **Código**: Identificador único (ej: LAB001)
+    - **Nombre**: Descripción de la práctica
+    - **Laboratorio**: Sede donde se realiza
+  </Step>
+  <Step title="Configuración de precios">
+    - **Precio base**: Costo unitario
+    - **Moneda**: ARS, USD, etc.
+    - **Fecha de vigencia**: Desde cuándo aplica
+  </Step>
+  <Step title="Asignar suministros">
+    Selecciona los insumos necesarios y cantidades
+  </Step>
+</Steps>
+
+### Ejemplo de Práctica
+
+```json
+{
+  "codigo": "LAB001",
+  "nombre": "Hemograma Completo",
+  "precio": 1500.00,
+  "moneda": "ARS",
+  "laboratorio_id": 1,
+  "activo": true,
+  "suministros": [
+    {
+      "suministro_id": 45,
+      "nombre": "Tubo EDTA",
+      "cantidad": 1,
+      "costo_unitario": 120.00
+    },
+    {
+      "suministro_id": 78,
+      "nombre": "Reactivo Hemograma",
+      "cantidad": 0.5,
+      "costo_unitario": 450.00
+    }
+  ],
+  "costo_total_suministros": 345.00
+}
+```
+
+## Tipos de Prácticas
+
+<CardGroup cols={2}>
+  <Card title="Prácticas Simples" icon="flask">
+    Un solo procedimiento independiente
+
+    **Ejemplo**: Glucemia, Hemograma
+  </Card>
+  <Card title="Prácticas Compuestas" icon="layer-group">
+    Agrupación de múltiples prácticas
+
+    **Ejemplo**: Panel Metabólico (incluye Glucemia + Urea + Creatinina)
+  </Card>
+  <Card title="Prácticas Relacionadas" icon="link">
+    Procedimientos con dependencias
+
+    **Ejemplo**: Cultivo → Antibiograma
+  </Card>
+  <Card title="Prácticas por Convenio" icon="handshake">
+    Precios especiales según obra social
+
+    **Ejemplo**: OSDE, Swiss Medical
+  </Card>
+</CardGroup>
+
+## Relaciones entre Prácticas
+
+### Prácticas Compuestas
+
+Una práctica puede contener otras prácticas:
+
+```typescript
+// Ejemplo: Panel Metabólico Completo
+{
+  codigo: "PANEL001",
+  nombre: "Panel Metabólico Completo",
+  precio: 3500.00,
+  practicas_incluidas: [
+    { codigo: "LAB010", nombre: "Glucemia" },
+    { codigo: "LAB011", nombre: "Urea" },
+    { codigo: "LAB012", nombre: "Creatinina" },
+    { codigo: "LAB013", nombre: "Ácido Úrico" },
+    { codigo: "LAB014", nombre: "Colesterol Total" }
+  ]
+}
+```
+
+### Configurar Relaciones
+
+<Steps>
+  <Step title="Editar práctica principal">
+    Click en la práctica → Pestaña "Relaciones"
+  </Step>
+  <Step title="Agregar prácticas relacionadas">
+    Botón "Agregar Práctica" → Buscar y seleccionar
+  </Step>
+  <Step title="Definir tipo de relación">
+    - **Incluye**: La práctica principal contiene esta
+    - **Requiere**: Necesita esta práctica previamente
+    - **Sugiere**: Recomendación automática
+  </Step>
+</Steps>
+
+## Costos y Precios
+
+### Cálculo Automático de Costos
+
+Optacost calcula automáticamente el costo de cada práctica:
+
+<Accordion title="Fórmula de Costo">
+```
+Costo Total = Σ (Suministros) + Gastos Operativos
+
+Donde:
+- Suministros = Σ (cantidad × costo_unitario)
+- Gastos Operativos = Costos fijos distribuidos (OS)
+```
+</Accordion>
+
+### Histórico de Precios
+
+Cada cambio de precio se registra automáticamente:
+
+| Fecha | Precio Anterior | Precio Nuevo | Usuario | Motivo |
+|-------|----------------|--------------|---------|--------|
+| 2024-12-01 | $1,500 | $1,800 | Admin | Ajuste inflación |
+| 2024-09-15 | $1,200 | $1,500 | Admin | Actualización trimestral |
+| 2024-06-01 | $1,000 | $1,200 | Admin | Aumento de insumos |
+
+### Precios por Convenio
+
+Configura precios diferentes según obra social o convenio:
+
+```json
+{
+  "practica_id": 123,
+  "nombre": "Hemograma Completo",
+  "precio_base": 1800.00,
+  "convenios": [
+    {
+      "convenio": "OSDE",
+      "precio": 2200.00,
+      "descuento": 0
+    },
+    {
+      "convenio": "Swiss Medical",
+      "precio": 2100.00,
+      "descuento": 0
+    },
+    {
+      "convenio": "Particular",
+      "precio": 1800.00,
+      "descuento": 10
+    }
+  ]
+}
+```
+
+## Suministros Asociados
+
+### Asignar Suministros
+
+Cada práctica requiere suministros específicos:
+
+<Steps>
+  <Step title="Editar práctica">
+    Click en práctica → Pestaña "Suministros"
+  </Step>
+  <Step title="Agregar suministro">
+    Botón "+ Agregar Suministro"
+  </Step>
+  <Step title="Configurar cantidad">
+    Define cantidad consumida por estudio
+  </Step>
+  <Step title="Ver costo total">
+    Optacost calcula automáticamente el costo
+  </Step>
+</Steps>
+
+### Ejemplo de Asignación
+
+<CodeGroup>
+
+```json Práctica: Hemograma
+{
+  "practica": "Hemograma Completo",
+  "suministros": [
+    {
+      "nombre": "Tubo EDTA",
+      "cantidad": 1,
+      "unidad": "unidad",
+      "costo": 120.00
+    },
+    {
+      "nombre": "Reactivo Hemograma",
+      "cantidad": 0.5,
+      "unidad": "ml",
+      "costo": 225.00
+    },
+    {
+      "nombre": "Tips 200μl",
+      "cantidad": 5,
+      "unidad": "unidad",
+      "costo": 15.00
+    }
+  ],
+  "costo_total": 360.00
+}
+```
+
+```json Práctica: Cultivo
+{
+  "practica": "Urocultivo",
+  "suministros": [
+    {
+      "nombre": "Placa Agar Sangre",
+      "cantidad": 1,
+      "unidad": "unidad",
+      "costo": 450.00
+    },
+    {
+      "nombre": "Placa CLED",
+      "cantidad": 1,
+      "unidad": "unidad",
+      "costo": 380.00
+    },
+    {
+      "nombre": "Ansa Descartable",
+      "cantidad": 1,
+      "unidad": "unidad",
+      "costo": 25.00
+    }
+  ],
+  "costo_total": 855.00
+}
+```
+
+</CodeGroup>
+
+## Búsqueda y Filtros
+
+### Búsqueda Avanzada
+
+La tabla de prácticas incluye búsqueda potente:
+
+<Tabs>
+  <Tab title="Por Código">
+    Busca por nomenclador (ej: LAB001)
+  </Tab>
+  <Tab title="Por Nombre">
+    Búsqueda de texto libre (ej: "hemograma")
+  </Tab>
+  <Tab title="Por Laboratorio">
+    Filtra por sede específica
+  </Tab>
+  <Tab title="Por Rango de Precio">
+    Define mínimo y máximo
+  </Tab>
+</Tabs>
+
+### Filtros Predefinidos
+
+- **Prácticas Activas**: Solo prácticas habilitadas
+- **Prácticas Inactivas**: Procedimientos discontinuados
+- **Sin Suministros**: Prácticas sin insumos asignados
+- **Más Costosas**: Top 10 por costo
+- **Más Frecuentes**: Top 10 por volumen
+
+## Importación Masiva
+
+### Importar desde Excel
+
+<Steps>
+  <Step title="Descargar plantilla">
+    Botón "Importar" → "Descargar Plantilla Excel"
+  </Step>
+  <Step title="Completar datos">
+    Llena las columnas: código, nombre, precio, laboratorio
+  </Step>
+  <Step title="Subir archivo">
+    Arrastra el archivo o click en "Seleccionar archivo"
+  </Step>
+  <Step title="Validar y confirmar">
+    Revisa los datos importados y confirma
+  </Step>
+</Steps>
+
+<Warning>
+La importación validará códigos duplicados y formatos incorrectos antes de procesar.
+</Warning>
+
+## Prácticas No Asignadas
+
+Vista especial para prácticas sin laboratorio:
+
+- **Uso**: Prácticas en proceso de configuración
+- **Acceso**: Menú → "Prácticas" → "No Asignadas"
+- **Acción**: Asignar laboratorio para activar
+
+## Análisis y Reportes
+
+### Métricas Disponibles
+
+<CardGroup cols={3}>
+  <Card title="Costo Promedio" icon="dollar-sign">
+    Costo medio de todas las prácticas
+  </Card>
+  <Card title="Margen de Ganancia" icon="percent">
+    Diferencia entre precio y costo
+  </Card>
+  <Card title="Volumen Mensual" icon="chart-column">
+    Cantidad de estudios realizados
+  </Card>
+</CardGroup>
+
+### Exportar Datos
+
+Exporta la lista de prácticas en múltiples formatos:
+
+- **Excel**: Con todas las columnas y relaciones
+- **CSV**: Para importar en otros sistemas
+- **PDF**: Reporte imprimible con precios
+
+## Próximos Pasos
+
+<CardGroup cols={2}>
+  <Card
+    title="Gestionar Suministros"
+    icon="box"
+    href="/caracteristicas/suministros"
+  >
+    Aprende a administrar el inventario
+  </Card>
+  <Card
+    title="API de Prácticas"
+    icon="code"
+    href="/api-reference/practicas/listar-practicas"
+  >
+    Integra prácticas vía API
+  </Card>
+</CardGroup>

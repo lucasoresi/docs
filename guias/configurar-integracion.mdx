@@ -1,0 +1,237 @@
+---
+title: 'Configurar Integraciones'
+description: 'Guía paso a paso para conectar servicios externos'
+icon: 'plug'
+---
+
+## Introducción
+
+Esta guía te ayudará a configurar integraciones con servicios externos para potenciar tu laboratorio con Optacost.
+
+## Integración con OpenAI (Chatbot)
+
+### Requisitos Previos
+
+<Check>Cuenta en OpenAI Platform</Check>
+<Check>Tarjeta de crédito configurada en OpenAI</Check>
+<Check>Permisos de administrador en Optacost</Check>
+
+### Paso 1: Obtener API Key de OpenAI
+
+<Steps>
+  <Step title="Crea una cuenta">
+    Ve a [platform.openai.com](https://platform.openai.com) y crea tu cuenta
+  </Step>
+
+  <Step title="Agrega método de pago">
+    En Settings → Billing, agrega una tarjeta de crédito
+  </Step>
+
+  <Step title="Genera API Key">
+    Ve a API Keys → Create new secret key
+
+    Copia la key (empieza con `sk-`)
+
+    <Warning>
+    Guarda la key de forma segura. Solo se muestra una vez.
+    </Warning>
+  </Step>
+
+  <Step title="Configura límites de gasto">
+    En Billing → Usage limits, establece un límite mensual (ej: $20/mes)
+  </Step>
+</Steps>
+
+### Paso 2: Configurar en Optacost
+
+```bash
+# Si usas variables de entorno (.env.local)
+OPENAI_API_KEY=sk-...
+OPENAI_MODEL=gpt-4o
+OPENAI_MAX_TOKENS=1000
+```
+
+O desde la interfaz de administración:
+
+<Steps>
+  <Step title="Ve a Configuración">
+    Panel de admin → Integraciones
+  </Step>
+
+  <Step title="OpenAI">
+    Click en "Configurar OpenAI"
+  </Step>
+
+  <Step title="Pega tu API Key">
+    Ingresa la key copiada anteriormente
+  </Step>
+
+  <Step title="Prueba la conexión">
+    Click en "Probar conexión" para verificar
+  </Step>
+</Steps>
+
+### Paso 3: Probar el Chatbot
+
+El icono del chatbot debería aparecer en la esquina inferior derecha. Haz una pregunta de prueba:
+
+```
+¿Cuántas prácticas tengo registradas este mes?
+```
+
+<Tip>
+Monitorea tu uso en el dashboard de OpenAI para controlar los costos
+</Tip>
+
+## Integración con AppSheet (Migración)
+
+Si vienes de una implementación anterior con AppSheet:
+
+### Exportar Datos de AppSheet
+
+<Steps>
+  <Step title="Descarga tus datos">
+    En AppSheet, ve a Data → Export data
+  </Step>
+
+  <Step title="Selecciona formato CSV">
+    Exporta cada tabla como CSV
+  </Step>
+
+  <Step title="Descarga los archivos">
+    Guarda todos los CSVs en una carpeta
+  </Step>
+</Steps>
+
+### Importar en Optacost
+
+<Steps>
+  <Step title="Ve a Importación">
+    Panel de admin → Importar datos
+  </Step>
+
+  <Step title="Selecciona archivos CSV">
+    Sube los archivos exportados de AppSheet
+  </Step>
+
+  <Step title="Mapea las columnas">
+    Asocia cada columna de AppSheet con los campos de Optacost
+  </Step>
+
+  <Step title="Vista previa">
+    Revisa cómo se importarán los datos
+  </Step>
+
+  <Step title="Importar">
+    Confirma y espera a que termine el proceso
+  </Step>
+</Steps>
+
+## Integración con Proveedores (APIs externas)
+
+Conecta con tus proveedores para actualizar precios automáticamente:
+
+### Configurar Proveedor
+
+```typescript
+// Ejemplo de configuración
+{
+  "nombre": "Proveedor Medical SA",
+  "tipo": "api",
+  "config": {
+    "url": "https://api.proveedor.com/v1/productos",
+    "api_key": "tu_api_key",
+    "frecuencia": "diaria",
+    "hora": "03:00"
+  },
+  "mapeo_campos": {
+    "codigo_producto": "sku",
+    "precio": "price",
+    "stock": "available_quantity"
+  }
+}
+```
+
+### Activar Sincronización
+
+<Steps>
+  <Step title="Configuración → Proveedores">
+    Agrega un nuevo proveedor
+  </Step>
+
+  <Step title="Tipo: API">
+    Selecciona integración vía API
+  </Step>
+
+  <Step title="Configura credenciales">
+    Ingresa URL y API key del proveedor
+  </Step>
+
+  <Step title="Mapea campos">
+    Asocia los campos del proveedor con tus suministros
+  </Step>
+
+  <Step title="Programa sincronización">
+    Define cada cuánto actualizar (diario, semanal, etc.)
+  </Step>
+
+  <Step title="Prueba">
+    Ejecuta una sincronización de prueba
+  </Step>
+</Steps>
+
+## Webhooks (Avanzado)
+
+Recibe notificaciones en tiempo real de eventos en Optacost:
+
+### Configurar Webhook
+
+```bash
+POST https://tu-servidor.com/webhook
+Content-Type: application/json
+
+{
+  "event": "practice.created",
+  "data": {
+    "id": "pract_123",
+    "tipo_practica": "Hemograma",
+    "costo": 250
+  },
+  "timestamp": "2024-12-13T12:00:00Z"
+}
+```
+
+### Eventos Disponibles
+
+- `practice.created` - Nueva práctica creada
+- `supply.low_stock` - Suministro con stock bajo
+- `report.generated` - Reporte generado
+- `user.created` - Nuevo usuario agregado
+
+## Solución de Problemas
+
+<AccordionGroup>
+  <Accordion title="La API key de OpenAI no funciona">
+    - Verifica que la key esté activa en platform.openai.com
+    - Asegúrate de tener saldo disponible
+    - Revisa que no hayas excedido el límite de uso
+  </Accordion>
+
+  <Accordion title="Error al importar CSV">
+    - Verifica que el archivo tenga la codificación UTF-8
+    - Asegúrate de que las columnas tengan encabezados
+    - Revisa que no haya caracteres especiales problemáticos
+  </Accordion>
+
+  <Accordion title="Sincronización con proveedor falla">
+    - Verifica la URL y credenciales
+    - Revisa que la API del proveedor esté disponible
+    - Comprueba que el mapeo de campos sea correcto
+  </Accordion>
+</AccordionGroup>
+
+## Próximos Pasos
+
+<Card title="Crear Reportes Personalizados" icon="chart-bar" href="/guias/crear-reportes-personalizados">
+  Aprende a generar reportes a medida para tu laboratorio
+</Card>

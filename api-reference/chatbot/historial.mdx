@@ -1,0 +1,82 @@
+---
+title: 'Historial de Conversaciones'
+api: 'GET /api/chat/history'
+description: 'Obtiene el historial de conversaciones con el chatbot'
+---
+
+## Endpoint
+
+```bash
+GET /api/chat/history
+```
+
+## Query Parameters
+
+<ParamField query="conversation_id" type="string">
+  ID específico de conversación
+</ParamField>
+
+<ParamField query="limit" type="number" default="50">
+  Cantidad de mensajes a recuperar
+</ParamField>
+
+<ParamField query="offset" type="number" default="0">
+  Offset para paginación
+</ParamField>
+
+## Request Example
+
+```bash
+GET /api/chat/history?conversation_id=conv_789&limit=20
+Authorization: Bearer <token>
+```
+
+## Response
+
+```json
+{
+  "conversations": [
+    {
+      "id": "conv_789",
+      "created_at": "2024-12-13T10:00:00Z",
+      "last_message_at": "2024-12-13T10:15:00Z",
+      "messages_count": 8,
+      "messages": [
+        {
+          "id": "msg_001",
+          "role": "user",
+          "content": "¿Cuánto gastamos en suministros el mes pasado?",
+          "timestamp": "2024-12-13T10:00:00Z"
+        },
+        {
+          "id": "msg_002",
+          "role": "assistant",
+          "content": "El mes pasado gastaste $36,250 en suministros...",
+          "timestamp": "2024-12-13T10:00:05Z",
+          "data": {
+            "sql_query": "...",
+            "results": [...]
+          }
+        }
+      ]
+    }
+  ],
+  "total": 15
+}
+```
+
+## Eliminar Conversación
+
+```bash
+DELETE /api/chat/history/:conversation_id
+Authorization: Bearer <token>
+```
+
+## Códigos de Respuesta
+
+| Código | Descripción |
+|--------|-------------|
+| 200 | Historial recuperado |
+| 401 | No autenticado |
+| 404 | Conversación no encontrada |
+| 500 | Error del servidor |

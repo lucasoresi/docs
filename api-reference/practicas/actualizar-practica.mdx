@@ -1,0 +1,100 @@
+---
+title: 'Actualizar Práctica'
+api: 'PATCH /api/practices/:id'
+description: 'Modifica los datos de una práctica existente'
+---
+
+## Endpoint
+
+```bash
+PATCH /api/practices/:id
+```
+
+## Autenticación
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token obtenido del login
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="id" type="string" required>
+  ID de la práctica a actualizar
+</ParamField>
+
+## Body Parameters
+
+<ParamField body="tipo_practica" type="string">
+  Nombre de la práctica médica
+</ParamField>
+
+<ParamField body="obra_social" type="string">
+  Obra social o prestador de salud
+</ParamField>
+
+<ParamField body="paciente" type="string">
+  Nombre del paciente
+</ParamField>
+
+<ParamField body="fecha" type="string">
+  Fecha de realización (ISO 8601)
+</ParamField>
+
+<ParamField body="precio_facturado" type="number">
+  Precio facturado
+</ParamField>
+
+<ParamField body="notas" type="string">
+  Observaciones adicionales
+</ParamField>
+
+<Note>
+Solo envía los campos que quieres actualizar. Los demás permanecerán sin cambios.
+</Note>
+
+## Request Example
+
+```bash
+PATCH /api/practices/pract_123
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+
+{
+  "precio_facturado": 850.00,
+  "notas": "Actualizado precio según convenio nuevo"
+}
+```
+
+## Response
+
+```json
+{
+  "id": "pract_123",
+  "updated_at": "2024-12-13T11:00:00Z",
+  "tipo_practica": "Hemograma Completo",
+  "obra_social": "OSDE",
+  "paciente": "Juan Pérez",
+  "fecha": "2024-12-01T10:30:00Z",
+  "costo_suministros": 250.00,
+  "precio_facturado": 850.00,
+  "margen": 600.00,
+  "notas": "Actualizado precio según convenio nuevo"
+}
+```
+
+## Limitaciones
+
+<Warning>
+No puedes modificar los suministros utilizados una vez creada la práctica. Si necesitas cambiarlos, elimina la práctica y crea una nueva.
+</Warning>
+
+## Códigos de Respuesta
+
+| Código | Descripción |
+|--------|-------------|
+| 200 | Práctica actualizada exitosamente |
+| 400 | Datos inválidos |
+| 401 | No autenticado |
+| 404 | Práctica no encontrada |
+| 403 | Sin permisos para editar |
+| 500 | Error del servidor |

@@ -1,0 +1,260 @@
+---
+title: 'Backups y Restauración'
+description: 'Sistema automático de respaldo y recuperación de datos'
+---
+
+## Descripción General
+
+Optacost incluye un sistema completo de **backups automáticos** que protege todos tus datos y te permite restaurarlos en caso de necesidad.
+
+<Note>
+Los backups se ejecutan automáticamente todos los días y se almacenan de forma segura en Supabase Storage
+</Note>
+
+## Características Principales
+
+<CardGroup cols={2}>
+  <Card title="Backups Automáticos" icon="clock">
+    Respaldo diario sin intervención manual
+  </Card>
+  <Card title="Restauración Rápida" icon="rotate-left">
+    Recupera datos de cualquier punto anterior
+  </Card>
+  <Card title="Almacenamiento Seguro" icon="shield">
+    Encriptación y aislamiento por laboratorio
+  </Card>
+  <Card title="Retención Configurable" icon="calendar">
+    Define cuánto tiempo mantener backups
+  </Card>
+</CardGroup>
+
+## Tipos de Backup
+
+### Backup Completo
+
+Incluye toda la información de tu laboratorio:
+
+```tsx
+{
+  practices: [...],           // Todas las prácticas
+  supplies: [...],            // Inventario completo
+  users: [...],              // Usuarios y permisos
+  external_supplies: [...],  // Suministros externos
+  configurations: {...}      // Configuraciones del sistema
+}
+```
+
+### Backup Incremental
+
+<Accordion title="¿Qué es un backup incremental?">
+  Solo respalda los datos que cambiaron desde el último backup completo, ahorrando espacio y tiempo
+</Accordion>
+
+## Programación de Backups
+
+### Frecuencia Predeterminada
+
+Por defecto, los backups se ejecutan:
+
+- **Backup completo**: Todos los domingos a las 3:00 AM
+- **Backup incremental**: Diariamente a las 3:00 AM
+- **Retención**: 30 días (configurable)
+
+### Personalización
+
+Puedes configurar:
+
+<Tabs>
+  <Tab title="Frecuencia">
+    ```javascript
+    {
+      full_backup: "weekly",      // weekly, monthly
+      incremental: "daily",       // daily, every_6_hours
+      time: "03:00"              // Hora UTC
+    }
+    ```
+  </Tab>
+  <Tab title="Retención">
+    ```javascript
+    {
+      retention_days: 30,        // Días a mantener
+      keep_monthly: true,        // Mantener 1 por mes indefinidamente
+      keep_yearly: false         // Mantener 1 por año
+    }
+    ```
+  </Tab>
+  <Tab title="Notificaciones">
+    ```javascript
+    {
+      notify_on_success: false,
+      notify_on_failure: true,
+      email: "admin@lab.com"
+    }
+    ```
+  </Tab>
+</Tabs>
+
+## Cómo Funciona
+
+<Steps>
+  <Step title="Ejecución Automática">
+    El sistema inicia el backup según la programación configurada
+  </Step>
+  <Step title="Extracción de Datos">
+    Se extraen todos los datos del laboratorio desde Supabase
+  </Step>
+  <Step title="Compresión">
+    Los datos se comprimen en formato JSON comprimido (gzip)
+  </Step>
+  <Step title="Almacenamiento">
+    El backup se sube a Supabase Storage en una carpeta privada
+  </Step>
+  <Step title="Verificación">
+    Se verifica la integridad del backup creado
+  </Step>
+  <Step title="Notificación">
+    Se envía confirmación al administrador (opcional)
+  </Step>
+</Steps>
+
+## Restaurar desde Backup
+
+### Interfaz de Restauración
+
+Para restaurar datos:
+
+<Warning>
+La restauración sobrescribirá los datos actuales. Asegúrate de hacer un backup manual antes de restaurar
+</Warning>
+
+<Steps>
+  <Step title="Accede a Backups">
+    Ve a la sección "Backups" en el menú principal
+  </Step>
+  <Step title="Selecciona el Backup">
+    Elige la fecha del backup que quieres restaurar
+  </Step>
+  <Step title="Vista Previa">
+    Revisa qué datos contiene el backup seleccionado
+  </Step>
+  <Step title="Confirma">
+    Confirma la restauración (se te pedirá tu contraseña)
+  </Step>
+  <Step title="Espera">
+    El proceso puede tardar varios minutos
+  </Step>
+  <Step title="Verifica">
+    Revisa que los datos se restauraron correctamente
+  </Step>
+</Steps>
+
+## Backup Manual
+
+### Crear Backup On-Demand
+
+Además de los backups automáticos, puedes crear backups manuales:
+
+```bash
+# Desde el panel de administración
+Backups → Crear Backup Manual
+```
+
+Útil antes de:
+- Actualizar el sistema
+- Hacer cambios masivos de datos
+- Importar información externa
+- Migraciones importantes
+
+## Monitoreo de Backups
+
+### Dashboard de Backups
+
+Visualiza el estado de tus respaldos:
+
+<CardGroup cols={3}>
+  <Card title="Último Backup" icon="calendar-check">
+    12/12/2024 03:00 AM
+  </Card>
+  <Card title="Tamaño Total" icon="hard-drive">
+    2.4 GB (15 backups)
+  </Card>
+  <Card title="Estado" icon="check-circle">
+    Todos exitosos
+  </Card>
+</CardGroup>
+
+### Historial
+
+Lista completa de backups con:
+- Fecha y hora
+- Tipo (completo/incremental)
+- Tamaño
+- Estado (exitoso/fallido)
+- Acción (restaurar/descargar/eliminar)
+
+## Descarga de Backups
+
+<Tip>
+Puedes descargar cualquier backup a tu computadora para tener una copia adicional
+</Tip>
+
+Los backups descargados:
+- Están en formato JSON comprimido (`.json.gz`)
+- Pueden abrirse con cualquier editor de texto después de descomprimir
+- Son compatibles con herramientas de análisis de datos
+- Pueden importarse nuevamente al sistema
+
+## Edge Functions
+
+Los backups se ejecutan mediante Supabase Edge Functions:
+
+```typescript
+// supabase/functions/backup/index.ts
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+
+serve(async (req) => {
+  const { lab_id } = await req.json()
+
+  // Extraer datos
+  const data = await fetchLabData(lab_id)
+
+  // Comprimir
+  const compressed = await compress(data)
+
+  // Guardar en Storage
+  await saveToStorage(compressed, lab_id)
+
+  return new Response("Backup completed", { status: 200 })
+})
+```
+
+## Seguridad
+
+### Protección de Backups
+
+Los backups están protegidos mediante:
+
+- **Encriptación**: Datos encriptados en reposo
+- **Aislamiento**: Cada laboratorio solo ve sus propios backups
+- **Autenticación**: Requiere permisos de administrador
+- **Audit Log**: Registro de todas las restauraciones
+
+## Resolución de Problemas
+
+<Accordion title="El backup falló">
+  Verifica la conectividad con Supabase y el espacio disponible en Storage. Revisa los logs para más detalles.
+</Accordion>
+
+<Accordion title="No puedo restaurar un backup">
+  Asegúrate de tener permisos de administrador y que el backup no esté corrupto. Intenta descargar el backup primero.
+</Accordion>
+
+<Accordion title="¿Puedo restaurar solo una tabla?">
+  Actualmente no, pero puedes descargar el backup, extraer la tabla que necesitas e importarla manualmente.
+</Accordion>
+
+## Siguiente Paso
+
+<Card title="Explora la API" icon="code" href="/api-reference/introduccion">
+  Aprende a usar la API de Optacost para integraciones personalizadas
+</Card>

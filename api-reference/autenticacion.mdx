@@ -1,0 +1,118 @@
+---
+title: 'Autenticación'
+description: 'Sistema de autenticación con Supabase Auth y JWT tokens'
+---
+
+## Descripción General
+
+Optacost utiliza **Supabase Auth** para gestionar la autenticación de usuarios. Todos los endpoints de la API (excepto login y registro) requieren un token JWT válido.
+
+## Flujo de Autenticación
+
+<Steps>
+  <Step title="Login">
+    El usuario envía email y contraseña
+  </Step>
+  <Step title="Validación">
+    Supabase valida las credenciales
+  </Step>
+  <Step title="Token JWT">
+    Se genera un access token y un refresh token
+  </Step>
+  <Step title="Requests Autenticados">
+    El cliente incluye el token en cada request
+  </Step>
+</Steps>
+
+## Login
+
+<ParamField path="email" type="string" required>
+  Email del usuario
+</ParamField>
+
+<ParamField path="password" type="string" required>
+  Contraseña del usuario
+</ParamField>
+
+### Request
+
+```bash
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "usuario@lab.com",
+  "password": "contraseña_segura"
+}
+```
+
+### Response
+
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "refresh_token": "v1.MRjygsqDiZv5z9qB...",
+  "expires_in": 3600,
+  "user": {
+    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "email": "usuario@lab.com",
+    "role": "admin",
+    "lab_id": "lab_123"
+  }
+}
+```
+
+## Uso del Token
+
+Incluye el `access_token` en el header `Authorization` de cada request:
+
+```bash
+GET /api/practices
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+## Refresh Token
+
+Los access tokens expiran después de 1 hora. Usa el refresh token para obtener uno nuevo:
+
+```bash
+POST /api/auth/refresh
+Content-Type: application/json
+
+{
+  "refresh_token": "v1.MRjygsqDiZv5z9qB..."
+}
+```
+
+## Logout
+
+```bash
+POST /api/auth/logout
+Authorization: Bearer <access_token>
+```
+
+## Roles y Permisos
+
+<CardGroup cols={3}>
+  <Card title="Admin" icon="crown">
+    Acceso completo a todo el sistema
+  </Card>
+  <Card title="User" icon="user">
+    Acceso a funcionalidades estándar
+  </Card>
+  <Card title="Viewer" icon="eye">
+    Solo lectura
+  </Card>
+</CardGroup>
+
+## Códigos de Error
+
+| Código | Descripción |
+|--------|-------------|
+| 400 | Credenciales inválidas |
+| 401 | Token expirado o inválido |
+| 403 | Permisos insuficientes |
+
+<Tip>
+Los tokens se almacenan automáticamente en localStorage en el cliente web
+</Tip>

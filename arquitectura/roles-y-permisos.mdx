@@ -1,0 +1,291 @@
+---
+title: 'Roles y Permisos'
+description: 'Sistema de control de acceso basado en roles (RBAC)'
+---
+
+## Descripción General
+
+Optacost implementa un sistema de **Role-Based Access Control (RBAC)** que define qué puede hacer cada usuario según su rol asignado.
+
+## Roles Disponibles
+
+<CardGroup cols={3}>
+  <Card title="Admin" icon="crown" color="#FFD700">
+    Control total del laboratorio
+  </Card>
+  <Card title="User" icon="user" color="#4A90E2">
+    Usuario estándar con permisos de operación
+  </Card>
+  <Card title="Viewer" icon="eye" color="#95A5A6">
+    Solo lectura, sin modificaciones
+  </Card>
+</CardGroup>
+
+## Matriz de Permisos
+
+| Funcionalidad | Admin | User | Viewer |
+|---------------|-------|------|--------|
+| **Prácticas** |
+| Ver prácticas | ✅ | ✅ | ✅ |
+| Crear prácticas | ✅ | ✅ | ❌ |
+| Editar prácticas | ✅ | ✅ | ❌ |
+| Eliminar prácticas | ✅ | ❌ | ❌ |
+| **Suministros** |
+| Ver inventario | ✅ | ✅ | ✅ |
+| Agregar suministros | ✅ | ✅ | ❌ |
+| Editar precios | ✅ | ❌ | ❌ |
+| Eliminar suministros | ✅ | ❌ | ❌ |
+| **Reportes** |
+| Ver reportes | ✅ | ✅ | ✅ |
+| Generar reportes | ✅ | ✅ | ❌ |
+| Exportar datos | ✅ | ✅ | ❌ |
+| **Usuarios** |
+| Ver usuarios | ✅ | ❌ | ❌ |
+| Crear usuarios | ✅ | ❌ | ❌ |
+| Editar roles | ✅ | ❌ | ❌ |
+| Eliminar usuarios | ✅ | ❌ | ❌ |
+| **Sistema** |
+| Configuración | ✅ | ❌ | ❌ |
+| Backups | ✅ | ❌ | ❌ |
+| Integraciones | ✅ | ❌ | ❌ |
+
+## Implementación Técnica
+
+### Row Level Security (RLS)
+
+Los permisos se aplican a nivel de base de datos usando RLS de PostgreSQL:
+
+```sql
+-- Política para que viewers solo puedan leer
+CREATE POLICY "Viewers can only read practices"
+ON practices
+FOR SELECT
+USING (
+    EXISTS (
+        SELECT 1 FROM users
+        WHERE users.id = auth.uid()
+        AND users.lab_id = practices.lab_id
+    )
+);
+
+-- Política para que users puedan crear
+CREATE POLICY "Users can create practices"
+ON practices
+FOR INSERT
+WITH CHECK (
+    EXISTS (
+        SELECT 1 FROM users
+        WHERE users.id = auth.uid()
+        AND users.lab_id = practices.lab_id
+        AND users.role IN ('user', 'admin')
+    )
+);
+
+-- Política para que solo admins puedan eliminar
+CREATE POLICY "Only admins can delete practices"
+ON practices
+FOR DELETE
+USING (
+    EXISTS (
+        SELECT 1 FROM users
+        WHERE users.id = auth.uid()
+        AND users.lab_id = practices.lab_id
+        AND users.role = 'admin'
+    )
+);
+```
+
+### Middleware de Autorización
+
+En el código de Next.js, se valida el rol antes de ejecutar acciones:
+
+```typescript
+// lib/auth.ts
+export async function requireRole(
+  requiredRole: 'admin' | 'user' | 'viewer'
+) {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    throw new Error('Not authenticated');
+  }
+
+  const roleHierarchy = {
+    admin: 3,
+    user: 2,
+    viewer: 1
+  };
+
+  if (roleHierarchy[user.role] < roleHierarchy[requiredRole]) {
+    throw new Error('Insufficient permissions');
+  }
+
+  return user;
+}
+```
+
+```typescript
+// app/api/practices/route.ts
+export async function DELETE(request: Request) {
+  // Solo admins pueden eliminar
+  await requireRole('admin');
+
+  // ... resto del código
+}
+```
+
+### Componentes del Frontend
+
+Los componentes verifican permisos antes de renderizar:
+
+```tsx
+// components/DeleteButton.tsx
+import { useUser } from '@/lib/hooks/use-user';
+
+export function DeleteButton({ practiceId }: Props) {
+  const { user } = useUser();
+
+  // Solo mostrar el botón si es admin
+  if (user?.role !== 'admin') {
+    return null;
+  }
+
+  return (
+    <Button onClick={() => deletePractice(practiceId)}>
+      Eliminar
+    </Button>
+  );
+}
+```
+
+## Asignación de Roles
+
+### Por el Admin del Laboratorio
+
+Los administradores pueden asignar roles desde la interfaz de usuarios:
+
+<Steps>
+  <Step title="Ir a Usuarios">
+    Navega al módulo de gestión de usuarios
+  </Step>
+  <Step title="Seleccionar Usuario">
+    Elige el usuario al que quieres cambiar el rol
+  </Step>
+  <Step title="Cambiar Rol">
+    Selecciona el nuevo rol del desplegable
+  </Step>
+  <Step title="Guardar">
+    Confirma el cambio
+  </Step>
+</Steps>
+
+### Vía API
+
+```bash
+PATCH /api/users/:user_id
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+
+{
+  "role": "user"
+}
+```
+
+## Roles Personalizados (Futuro)
+
+En versiones futuras, se planea implementar:
+
+- **Roles personalizados**: Crear roles a medida
+- **Permisos granulares**: Control fino sobre cada acción
+- **Equipos**: Agrupar usuarios en equipos con permisos específicos
+- **Permisos temporales**: Otorgar acceso por tiempo limitado
+
+## Auditoría
+
+Todos los cambios de roles quedan registrados en la tabla `audit_log`:
+
+```sql
+CREATE TABLE audit_log (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    lab_id UUID REFERENCES labs(id),
+    user_id UUID REFERENCES users(id),
+    action TEXT NOT NULL,
+    entity_type TEXT NOT NULL,
+    entity_id UUID,
+    old_values JSONB,
+    new_values JSONB,
+    timestamp TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
+
+Ejemplo de registro:
+
+```json
+{
+  "action": "role_changed",
+  "entity_type": "user",
+  "entity_id": "user_123",
+  "old_values": { "role": "viewer" },
+  "new_values": { "role": "user" },
+  "changed_by": "admin_456"
+}
+```
+
+## Mejores Prácticas
+
+<AccordionGroup>
+  <Accordion title="Principio de Menor Privilegio">
+    Asigna el rol mínimo necesario. No todos necesitan ser admins.
+  </Accordion>
+
+  <Accordion title="Revisión Periódica">
+    Revisa los roles cada 3-6 meses y ajusta según necesidad.
+  </Accordion>
+
+  <Accordion title="Un Solo Admin Inicial">
+    Comienza con un solo admin y agrega más solo si es necesario.
+  </Accordion>
+
+  <Accordion title="Documenta Cambios">
+    Mantén un registro de por qué se cambió el rol de alguien.
+  </Accordion>
+</AccordionGroup>
+
+## Casos de Uso por Rol
+
+### Admin
+
+<Card title="Dueño o Gerente del Laboratorio" icon="building">
+  Responsable de la configuración general, gestión de usuarios, configuración de integraciones y decisiones estratégicas.
+</Card>
+
+### User
+
+<Card title="Técnicos y Operadores" icon="user-doctor">
+  Realizan prácticas diarias, registran suministros utilizados, generan reportes operativos.
+</Card>
+
+### Viewer
+
+<Card title="Contadores o Auditores" icon="calculator">
+  Necesitan ver datos y reportes pero no modificar nada. Útil para personal externo temporal.
+</Card>
+
+## Seguridad
+
+<Warning>
+Nunca compartas credenciales de admin. Crea usuarios individuales para cada persona.
+</Warning>
+
+### Recomendaciones
+
+- Usa contraseñas fuertes (mínimo 12 caracteres)
+- Habilita autenticación de dos factores (próximamente)
+- Revoca acceso inmediatamente cuando alguien deja el laboratorio
+- Monitorea el audit log regularmente
+
+## Siguiente Paso
+
+<Card title="Integración con OpenAI" icon="brain" href="/arquitectura/integracion-openai">
+  Descubre cómo funciona el chatbot inteligente con GPT-4o
+</Card>

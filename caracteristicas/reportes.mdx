@@ -1,0 +1,160 @@
+---
+title: 'Reportes y Análisis'
+description: 'Genera reportes detallados de costos, consumos y métricas operativas'
+---
+
+## Descripción General
+
+El módulo de **Reportes** te permite generar análisis completos de la operación de tu laboratorio, con métricas de costos, consumos y productividad.
+
+## Tipos de Reportes
+
+<CardGroup cols={2}>
+  <Card title="Reporte General" icon="file-lines">
+    Vista completa de todas las prácticas realizadas
+  </Card>
+  <Card title="Reporte por Obra Social" icon="hospital">
+    Análisis por prestador de salud
+  </Card>
+  <Card title="Reporte de Consumos" icon="cart-shopping">
+    Suministros utilizados por periodo
+  </Card>
+  <Card title="Reporte de Costos" icon="money-bill-trend-up">
+    Análisis financiero detallado
+  </Card>
+</CardGroup>
+
+## Reporte General
+
+### Filtros Disponibles
+
+Personaliza tus reportes con múltiples filtros:
+
+```tsx
+// Opciones de filtrado
+{
+  periodo: "mes_actual", // últimos_7_dias, mes_pasado, año_actual, personalizado
+  obra_social: "OSDE",
+  tipo_practica: "Hemograma",
+  laboratorio: "Lab Central",
+  profesional: "Dr. Juan Pérez"
+}
+```
+
+### Métricas Incluidas
+
+Cada reporte incluye:
+- Cantidad de prácticas realizadas
+- Costo total de suministros
+- Precio facturado
+- Margen de ganancia
+- Tiempo promedio de procesamiento
+
+## Exportación de Datos
+
+<Tabs>
+  <Tab title="Excel">
+    Exporta a formato XLSX con todas las fórmulas
+    ```bash
+    - Múltiples hojas por categoría
+    - Gráficos incluidos
+    - Formato profesional
+    ```
+  </Tab>
+  <Tab title="PDF">
+    Genera PDFs listos para imprimir
+    ```bash
+    - Diseño profesional
+    - Gráficos y tablas
+    - Encabezado personalizado
+    ```
+  </Tab>
+  <Tab title="CSV">
+    Exporta datos crudos para análisis externo
+    ```bash
+    - Compatible con cualquier software
+    - Datos sin formato
+    - Ideal para importar
+    ```
+  </Tab>
+</Tabs>
+
+## Reportes Programados
+
+<Note>
+Configura reportes automáticos que se envíen por email periódicamente
+</Note>
+
+### Configuración
+
+<Steps>
+  <Step title="Crea el reporte">
+    Define los filtros y métricas que necesitas
+  </Step>
+  <Step title="Configura la frecuencia">
+    Elige si quieres reportes diarios, semanales o mensuales
+  </Step>
+  <Step title="Define destinatarios">
+    Agrega los emails que recibirán el reporte
+  </Step>
+</Steps>
+
+## Análisis Gráfico
+
+Visualiza tus datos con gráficos interactivos:
+
+- **Gráfico de barras**: Comparación entre periodos
+- **Gráfico circular**: Distribución por categorías
+- **Línea de tendencia**: Evolución temporal
+- **Heatmap**: Patrones de actividad
+
+## Dashboard Personalizado
+
+Crea tu propio dashboard con las métricas más importantes:
+
+<CardGroup cols={3}>
+  <Card title="Widget de Costos" icon="dollar-sign">
+    Costo total del periodo
+  </Card>
+  <Card title="Widget de Prácticas" icon="flask">
+    Total de estudios realizados
+  </Card>
+  <Card title="Widget de Margen" icon="percent">
+    Porcentaje de rentabilidad
+  </Card>
+</CardGroup>
+
+## Comparativas
+
+Compara resultados entre diferentes periodos:
+
+```tsx
+// Ejemplo de comparativa
+{
+  periodo_actual: {
+    total_practicas: 450,
+    costo_total: 12500,
+    facturacion: 28000
+  },
+  periodo_anterior: {
+    total_practicas: 420,
+    costo_total: 11800,
+    facturacion: 26500
+  },
+  variacion: {
+    practicas: "+7.1%",
+    costos: "+5.9%",
+    facturacion: "+5.7%"
+  }
+}
+```
+
+<Tip>
+Usa las comparativas mensuales para identificar tendencias y tomar decisiones informadas
+</Tip>
+
+## Siguiente Paso
+
+<Card title="Configura Derivaciones" icon="share-nodes" href="/caracteristicas/derivaciones">
+  Aprende a gestionar estudios derivados a laboratorios externos
+</Card>

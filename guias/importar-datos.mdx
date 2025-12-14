@@ -1,0 +1,373 @@
+---
+title: 'Importar Datos'
+description: 'Importa prácticas, suministros y datos históricos desde archivos Excel o CSV'
+icon: 'file-import'
+---
+
+## Introducción
+
+Optacost permite importar datos masivamente desde archivos Excel (.xlsx) o CSV, ideal para:
+- Migrar desde otro sistema
+- Cargar datos históricos
+- Importar información de proveedores
+- Actualizar inventarios masivamente
+
+## Formatos Soportados
+
+<CardGroup cols={2}>
+  <Card title="Excel (.xlsx)" icon="file-excel">
+    Formatos modernos de Microsoft Excel
+  </Card>
+  <Card title="CSV (.csv)" icon="file-csv">
+    Valores separados por comas (UTF-8)
+  </Card>
+</CardGroup>
+
+## Importar Prácticas
+
+### Paso 1: Preparar el Archivo
+
+Crea un archivo Excel o CSV con las siguientes columnas:
+
+| Columna | Requerido | Formato | Ejemplo |
+|---------|-----------|---------|---------|
+| fecha | ✅ | YYYY-MM-DD o DD/MM/YYYY | 2024-12-13 |
+| tipo_practica | ✅ | Texto | Hemograma Completo |
+| obra_social | ✅ | Texto | OSDE |
+| paciente | ❌ | Texto | Juan Pérez |
+| precio_facturado | ✅ | Número | 800.00 |
+| notas | ❌ | Texto | Paciente en ayuno |
+
+<Tip>
+Descarga la plantilla de ejemplo desde Importar → Descargar Plantilla
+</Tip>
+
+### Ejemplo de Archivo Excel
+
+```
+| fecha      | tipo_practica      | obra_social   | paciente       | precio_facturado | notas |
+|------------|-------------------|---------------|----------------|------------------|-------|
+| 2024-12-01 | Hemograma Completo| OSDE          | Juan Pérez     | 800.00          |       |
+| 2024-12-01 | Glucemia          | Swiss Medical | María González | 450.00          |       |
+| 2024-12-02 | Orina Completa    | Particular    | Carlos Ruiz    | 500.00          |       |
+```
+
+### Paso 2: Importar el Archivo
+
+<Steps>
+  <Step title="Ve a Prácticas">
+    Menú principal → Prácticas
+  </Step>
+
+  <Step title="Click en Importar">
+    Botón "Importar Prácticas" en la esquina superior
+  </Step>
+
+  <Step title="Sube el archivo">
+    Arrastra y suelta el archivo o click para seleccionar
+  </Step>
+
+  <Step title="Mapea las columnas">
+    Asocia cada columna de tu archivo con los campos de Optacost
+
+    ```
+    Tu Columna        →  Campo en Optacost
+    "Fecha"           →  fecha
+    "Tipo Estudio"    →  tipo_practica
+    "Obra Social"     →  obra_social
+    "Precio"          →  precio_facturado
+    ```
+  </Step>
+
+  <Step title="Vista previa">
+    Revisa cómo se importarán las primeras 10 filas
+
+    <Check>Verde: Datos válidos</Check>
+    <Warning>Amarillo: Advertencias (ej: fecha en formato diferente)</Warning>
+    <Warning>Rojo: Errores que impedirán la importación</Warning>
+  </Step>
+
+  <Step title="Configurar opciones">
+    **Opciones adicionales:**
+
+    - ¿Saltar primera fila? (si tiene encabezados)
+    - ¿Qué hacer con duplicados? (ignorar, actualizar, importar de todos modos)
+    - ¿Calcular costos automáticamente? (si tienes suministros asignados)
+  </Step>
+
+  <Step title="Iniciar importación">
+    Click en "Importar X prácticas"
+
+    Verás una barra de progreso
+  </Step>
+
+  <Step title="Revisar resultados">
+    Al finalizar:
+    - ✅ X prácticas importadas exitosamente
+    - ⚠️ Y prácticas con advertencias
+    - ❌ Z prácticas rechazadas (ver errores)
+  </Step>
+</Steps>
+
+### Manejo de Errores
+
+Si algunas filas fallan:
+
+```json
+{
+  "fila": 5,
+  "error": "fecha inválida",
+  "dato": "13/32/2024",
+  "sugerencia": "La fecha debe ser válida (formato: DD/MM/YYYY o YYYY-MM-DD)"
+}
+```
+
+Puedes:
+1. Descargar archivo con errores
+2. Corregir los datos
+3. Reimportar solo las filas corregidas
+
+## Importar Suministros
+
+### Formato del Archivo
+
+| Columna | Requerido | Formato | Ejemplo |
+|---------|-----------|---------|---------|
+| nombre | ✅ | Texto | Tubo EDTA 5ml |
+| codigo | ❌ | Texto | EDTA-5 |
+| categoria | ✅ | Texto | Tubos |
+| stock_actual | ✅ | Número entero | 200 |
+| stock_minimo | ✅ | Número entero | 100 |
+| precio_unitario | ✅ | Número decimal | 50.00 |
+| proveedor | ❌ | Texto | Proveedor Medical SA |
+
+### Ejemplo
+
+```
+| nombre          | codigo  | categoria | stock_actual | stock_minimo | precio_unitario | proveedor |
+|-----------------|---------|-----------|--------------|--------------|-----------------|-----------|
+| Tubo EDTA 5ml   | EDTA-5  | Tubos     | 200          | 100          | 50.00           | Medical SA|
+| Guantes M       | GUA-M   | EPP       | 500          | 200          | 15.00           | Insumos XYZ|
+| Reactivo A      | REA-001 | Reactivos | 50           | 20           | 180.00          | QuímicaPro|
+```
+
+### Actualización Masiva de Precios
+
+Si solo quieres actualizar precios:
+
+1. Exporta tu inventario actual: Suministros → Exportar
+2. Modifica la columna `precio_unitario`
+3. Importa de nuevo
+4. Selecciona "Actualizar existentes por código"
+
+<Warning>
+El sistema actualizará SOLO los precios, manteniendo el stock actual
+</Warning>
+
+## Importar desde Otros Sistemas
+
+### Desde AppSheet
+
+<Steps>
+  <Step title="Exporta desde AppSheet">
+    En AppSheet: Data → Export → Download as CSV
+  </Step>
+
+  <Step title="Convierte el formato">
+    AppSheet puede usar nombres de columnas diferentes. Mapea:
+
+    ```
+    AppSheet     →  Optacost
+    "Label"      →  nombre
+    "Stock"      →  stock_actual
+    "Price"      →  precio_unitario
+    ```
+  </Step>
+
+  <Step title="Importa en Optacost">
+    Usa el importador y mapea las columnas apropiadamente
+  </Step>
+</Steps>
+
+### Desde Excel de Proveedores
+
+Los proveedores suelen enviar listas de precios en formatos variados:
+
+<Tabs>
+  <Tab title="Proveedor A">
+    ```
+    Código | Descripción | Precio Lista
+    -------|-------------|-------------
+    001    | Producto A  | $50.00
+    002    | Producto B  | $75.00
+    ```
+
+    Mapeo:
+    - Código → codigo
+    - Descripción → nombre
+    - Precio Lista → precio_unitario
+  </Tab>
+
+  <Tab title="Proveedor B">
+    ```
+    SKU    | Product Name | Unit Price | Available
+    -------|--------------|------------|----------
+    A-001  | Product A    | 50.00      | 100
+    ```
+
+    Mapeo:
+    - SKU → codigo
+    - Product Name → nombre
+    - Unit Price → precio_unitario
+    - Available → stock_actual
+  </Tab>
+</Tabs>
+
+<Tip>
+Guarda los mapeos como plantillas para reutilizar cada vez que el proveedor te envíe una lista actualizada
+</Tip>
+
+## Validaciones Automáticas
+
+El sistema valida automáticamente:
+
+<AccordionGroup>
+  <Accordion title="Fechas">
+    - Reconoce formatos: DD/MM/YYYY, YYYY-MM-DD, DD-MM-YYYY
+    - Rechaza fechas futuras (configurable)
+    - Rechaza fechas muy antiguas (> 5 años, configurable)
+  </Accordion>
+
+  <Accordion title="Números">
+    - Acepta comas o puntos como decimal (50,00 o 50.00)
+    - Rechaza valores negativos en precios y stocks
+    - Redondea a 2 decimales
+  </Accordion>
+
+  <Accordion title="Duplicados">
+    Detecta duplicados por:
+    - Código de suministro
+    - Combinación fecha + tipo_practica + paciente
+
+    Opciones:
+    - Ignorar duplicados
+    - Actualizar existentes
+    - Importar de todos modos (crea nuevos)
+  </Accordion>
+
+  <Accordion title="Textos">
+    - Elimina espacios extra
+    - Capitaliza nombres apropiadamente
+    - Detecta caracteres inválidos
+  </Accordion>
+</AccordionGroup>
+
+## Importación Programada
+
+Para proveedores que comparten archivos regularmente:
+
+### Configurar Importación Automática
+
+<Steps>
+  <Step title="Configuración → Importaciones">
+    Sección de administración
+  </Step>
+
+  <Step title="Nueva Importación Automática">
+    Click en "Programar Importación"
+  </Step>
+
+  <Step title="Configura origen">
+    Opciones:
+    - Email attachment: Extrae CSV de un email
+    - FTP/SFTP: Descarga desde servidor del proveedor
+    - URL: Descarga desde link directo
+    - Google Drive/Dropbox: Sincroniza desde carpeta
+  </Step>
+
+  <Step title="Define mapeo">
+    Configura cómo mapear las columnas (se guardará)
+  </Step>
+
+  <Step title="Programa frecuencia">
+    - Diario a las X:00
+    - Semanal cada lunes
+    - Mensual primer día del mes
+  </Step>
+
+  <Step title="Notificaciones">
+    Recibe email con resumen de cada importación
+  </Step>
+</Steps>
+
+## Rollback de Importación
+
+Si importaste datos incorrectos:
+
+<Warning>
+Solo disponible en las primeras 24 horas después de la importación
+</Warning>
+
+<Steps>
+  <Step title="Ve a Historial de Importaciones">
+    Configuración → Importaciones → Historial
+  </Step>
+
+  <Step title="Encuentra la importación">
+    Lista de todas las importaciones con fecha
+  </Step>
+
+  <Step title="Click en Revertir">
+    Esto eliminará TODOS los registros importados en esa operación
+  </Step>
+
+  <Step title="Confirma">
+    Escribe "REVERTIR" para confirmar
+  </Step>
+</Steps>
+
+## Mejores Prácticas
+
+<Check>Siempre revisa la vista previa antes de importar</Check>
+<Check>Haz un backup antes de importaciones grandes</Check>
+<Check>Importa de a poco primero (10-20 registros) para validar</Check>
+<Check>Usa códigos únicos para identificar suministros</Check>
+<Check>Mantén formato consistente en fechas</Check>
+<Check>Documenta el mapeo de columnas por proveedor</Check>
+
+## Solución de Problemas
+
+<AccordionGroup>
+  <Accordion title="Archivo no se sube">
+    - Verifica que sea .xlsx o .csv
+    - Tamaño máximo: 10MB
+    - Máximo 10,000 filas por importación
+    - Si tienes más, divide en múltiples archivos
+  </Accordion>
+
+  <Accordion title="Caracteres raros (encoding)">
+    Si ves caracteres extraños:
+    - Abre el CSV en Notepad++
+    - Encoding → Convert to UTF-8
+    - Guarda y vuelve a importar
+  </Accordion>
+
+  <Accordion title="Fechas no se reconocen">
+    En Excel, asegúrate de que la columna esté formateada como:
+    - Texto: Para DD/MM/YYYY
+    - Fecha: El sistema convertirá automáticamente
+  </Accordion>
+
+  <Accordion title="Importación muy lenta">
+    Para archivos grandes (>5000 filas):
+    - Divide en archivos más pequeños
+    - Importa fuera de horario laboral
+    - Desactiva cálculos automáticos temporalmente
+  </Accordion>
+</AccordionGroup>
+
+## Próximos Pasos
+
+<Card title="Usar el Chatbot" icon="robot" href="/guias/usar-chatbot">
+  Aprende a usar el asistente con IA para consultar tus datos
+</Card>

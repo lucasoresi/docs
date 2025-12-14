@@ -1,0 +1,277 @@
+---
+title: Autenticación
+description: Sistema de autenticación y control de acceso en Optacost
+---
+
+## Sistema de Autenticación
+
+Optacost utiliza **Supabase Auth** para gestionar la autenticación de usuarios de forma segura y escalable.
+
+## Métodos de Autenticación
+
+### Email y Contraseña
+
+El método principal de autenticación es mediante credenciales:
+
+```typescript
+// Ejemplo de login
+const { data, error } = await supabase.auth.signInWithPassword({
+  email: 'usuario@laboratorio.com',
+  password: 'contraseña_segura'
+})
+```
+
+### Recuperación de Contraseña
+
+<Steps>
+  <Step title="Solicitar recuperación">
+    En la página de login → "¿Olvidaste tu contraseña?"
+  </Step>
+  <Step title="Recibir email">
+    Recibirás un enlace de recuperación en tu correo
+  </Step>
+  <Step title="Crear nueva contraseña">
+    Click en el enlace y establece una nueva contraseña
+  </Step>
+</Steps>
+
+## Roles y Permisos
+
+Optacost implementa un sistema de roles granular:
+
+### Niveles de Acceso
+
+<CardGroup cols={2}>
+  <Card title="SuperAdmin" icon="crown">
+    **Nivel 9** - Control total de la plataforma
+    - Gestión de clientes
+    - Configuración global
+    - Acceso a todos los datos
+  </Card>
+  <Card title="Admin" icon="user-shield">
+    **Nivel 1** - Gestión del cliente
+    - Usuarios y permisos
+    - Configuraciones
+    - Backups y restauración
+  </Card>
+  <Card title="Editor" icon="pen">
+    **Nivel 3** - Edición limitada
+    - Crear/editar prácticas
+    - Gestionar suministros
+    - Generar reportes
+  </Card>
+  <Card title="User" icon="user">
+    **Nivel 2** - Solo lectura
+    - Ver dashboard
+    - Consultar datos
+    - Exportar reportes
+  </Card>
+</CardGroup>
+
+### Matriz de Permisos
+
+| Funcionalidad | User | Editor | Admin | SuperAdmin |
+|--------------|------|--------|-------|------------|
+| Ver Dashboard | ✅ | ✅ | ✅ | ✅ |
+| Ver Prácticas | ✅ | ✅ | ✅ | ✅ |
+| Crear Prácticas | ❌ | ✅ | ✅ | ✅ |
+| Editar Prácticas | ❌ | ✅ | ✅ | ✅ |
+| Eliminar Prácticas | ❌ | ❌ | ✅ | ✅ |
+| Ver Suministros | ✅ | ✅ | ✅ | ✅ |
+| Gestionar Suministros | ❌ | ✅ | ✅ | ✅ |
+| Generar Reportes | ✅ | ✅ | ✅ | ✅ |
+| Gestionar Usuarios | ❌ | ❌ | ✅ | ✅ |
+| Configurar Integraciones | ❌ | ❌ | ✅ | ✅ |
+| Backups | ❌ | ❌ | ✅ | ✅ |
+| Gestionar Clientes | ❌ | ❌ | ❌ | ✅ |
+
+## Sesiones
+
+### Duración de Sesión
+
+- **Sesión activa**: 24 horas por defecto
+- **Refresh token**: 30 días
+- **Renovación automática**: Mientras el usuario esté activo
+
+### Cerrar Sesión
+
+```typescript
+// Cerrar sesión
+const { error } = await supabase.auth.signOut()
+```
+
+## Seguridad Multi-tenant
+
+### Aislamiento de Datos
+
+Cada cliente (tenant) tiene:
+
+<Accordion title="Schema de Base de Datos Dedicado">
+```sql
+-- Cada cliente tiene su propio schema
+CREATE SCHEMA IF NOT EXISTS client_{subdomain};
+
+-- Todas las tablas están aisladas
+CREATE TABLE client_{subdomain}.practices (...);
+CREATE TABLE client_{subdomain}.supplies (...);
+```
+</Accordion>
+
+<Accordion title="Row Level Security (RLS)">
+Supabase RLS asegura que los usuarios solo accedan a datos de su cliente:
+
+```sql
+-- Política RLS ejemplo
+CREATE POLICY "Users can only see their client data"
+ON practices
+FOR SELECT
+USING (
+  auth.jwt() ->> 'subdomain' = current_schema()
+);
+```
+</Accordion>
+
+<Accordion title="Validación de Subdominio">
+El middleware de Next.js valida que el usuario pertenezca al subdominio:
+
+```typescript
+// middleware.ts
+export function middleware(request: NextRequest) {
+  const subdomain = getSubdomain(request)
+  const userSubdomain = getUserSubdomain(request)
+
+  if (subdomain !== userSubdomain) {
+    return NextResponse.redirect('/unauthorized')
+  }
+}
+```
+</Accordion>
+
+## Tokens JWT
+
+### Estructura del Token
+
+```json
+{
+  "sub": "user-uuid",
+  "email": "usuario@laboratorio.com",
+  "role": 1,
+  "subdomain": "mi-laboratorio",
+  "client_id": 123,
+  "exp": 1234567890
+}
+```
+
+### Uso en APIs
+
+Todas las peticiones a la API deben incluir el token:
+
+```bash
+curl -X GET \
+  https://mi-laboratorio.app.optacost.com/api/practices \
+  -H 'Authorization: Bearer {token}'
+```
+
+## Autenticación en API
+
+<CodeGroup>
+
+```typescript Next.js
+// Server Component
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from 'next/headers'
+
+export default async function Page() {
+  const supabase = createServerComponentClient({ cookies })
+  const { data: { session } } = await supabase.auth.getSession()
+
+  if (!session) {
+    redirect('/login')
+  }
+
+  // Usuario autenticado
+  return <Dashboard user={session.user} />
+}
+```
+
+```typescript API Route
+// app/api/practices/route.ts
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from 'next/headers'
+
+export async function GET(request: Request) {
+  const supabase = createRouteHandlerClient({ cookies })
+  const { data: { session } } = await supabase.auth.getSession()
+
+  if (!session) {
+    return new Response('Unauthorized', { status: 401 })
+  }
+
+  // Procesar petición autenticada
+}
+```
+
+```typescript Client Component
+// Client Component
+'use client'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+
+export default function Component() {
+  const supabase = createClientComponentClient()
+
+  const handleLogin = async () => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: 'user@example.com',
+      password: 'password'
+    })
+  }
+}
+```
+
+</CodeGroup>
+
+## Mejores Prácticas
+
+<AccordionGroup>
+  <Accordion title="Contraseñas Seguras">
+    - Mínimo 8 caracteres
+    - Combinación de mayúsculas, minúsculas y números
+    - Incluir caracteres especiales
+    - No reutilizar contraseñas
+  </Accordion>
+
+  <Accordion title="Gestión de Sesiones">
+    - Cerrar sesión al terminar
+    - No compartir credenciales
+    - Revisar sesiones activas regularmente
+  </Accordion>
+
+  <Accordion title="Permisos de Usuario">
+    - Asignar el rol mínimo necesario
+    - Revisar permisos periódicamente
+    - Revocar acceso de usuarios inactivos
+  </Accordion>
+</AccordionGroup>
+
+<Warning>
+Nunca compartas tu contraseña o token de acceso. El equipo de Optacost nunca te pedirá esta información.
+</Warning>
+
+## Próximos Pasos
+
+<CardGroup cols={2}>
+  <Card
+    title="Gestionar Usuarios"
+    icon="users"
+    href="/guias/gestionar-usuarios"
+  >
+    Aprende a invitar y administrar usuarios
+  </Card>
+  <Card
+    title="API Reference"
+    icon="key"
+    href="/api-reference/autenticacion"
+  >
+    Documentación técnica de autenticación
+  </Card>
+</CardGroup>

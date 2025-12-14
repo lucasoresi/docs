@@ -1,0 +1,50 @@
+---
+title: 'Eliminar Suministro'
+api: 'DELETE /api/supplies/:id'
+description: 'Elimina un suministro del inventario'
+---
+
+## Endpoint
+
+```bash
+DELETE /api/supplies/:id
+```
+
+## Path Parameters
+
+<ParamField path="id" type="string" required>
+  ID del suministro a eliminar
+</ParamField>
+
+## Request Example
+
+```bash
+DELETE /api/supplies/sup_123
+Authorization: Bearer <token>
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "message": "Suministro eliminado exitosamente",
+  "id": "sup_123"
+}
+```
+
+## Restricciones
+
+<Warning>
+No puedes eliminar un suministro que esté asignado a prácticas activas
+</Warning>
+
+## Códigos de Respuesta
+
+| Código | Descripción |
+|--------|-------------|
+| 200 | Eliminado exitosamente |
+| 401 | No autenticado |
+| 404 | Suministro no encontrado |
+| 409 | Suministro en uso |
+| 500 | Error del servidor |

@@ -1,0 +1,70 @@
+---
+title: 'Crear Suministro'
+api: 'POST /api/supplies'
+description: 'Agrega un nuevo suministro al inventario'
+---
+
+## Endpoint
+
+```bash
+POST /api/supplies
+```
+
+## Body Parameters
+
+<ParamField body="nombre" type="string" required>
+  Nombre del suministro
+</ParamField>
+
+<ParamField body="codigo" type="string">
+  Código interno del suministro
+</ParamField>
+
+<ParamField body="categoria" type="string" required>
+  Categoría del suministro
+</ParamField>
+
+<ParamField body="stock_inicial" type="number" required>
+  Stock inicial
+</ParamField>
+
+<ParamField body="stock_minimo" type="number" default="0">
+  Stock mínimo para alertas
+</ParamField>
+
+<ParamField body="precio_unitario" type="number" required>
+  Precio por unidad
+</ParamField>
+
+<ParamField body="proveedor" type="string">
+  Nombre del proveedor
+</ParamField>
+
+## Request Example
+
+```bash
+POST /api/supplies
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "nombre": "Tubo EDTA 5ml",
+  "codigo": "EDTA-5",
+  "categoria": "Tubos",
+  "stock_inicial": 200,
+  "stock_minimo": 100,
+  "precio_unitario": 50.00,
+  "proveedor": "Proveedor Medical SA"
+}
+```
+
+## Response
+
+```json
+{
+  "id": "sup_123",
+  "created_at": "2024-12-13T11:30:00Z",
+  "nombre": "Tubo EDTA 5ml",
+  "stock_actual": 200
+}
+```

@@ -1,0 +1,118 @@
+---
+title: ¿Qué es Optacost?
+description: Plataforma SaaS de gestión de laboratorios y análisis de costos médicos
+---
+
+## Introducción
+
+**Optacost** es una plataforma empresarial completa diseñada para la gestión integral de laboratorios médicos, análisis de costos de prácticas y optimización de suministros.
+
+## Características Principales
+
+<CardGroup cols={2}>
+  <Card
+    title="Gestión de Prácticas"
+    icon="flask"
+    href="/caracteristicas/practicas"
+  >
+    Administra procedimientos médicos, precios y relaciones entre prácticas
+  </Card>
+  <Card
+    title="Control de Suministros"
+    icon="box"
+    href="/caracteristicas/suministros"
+  >
+    Inventario inteligente con tracking de consumo y análisis de costos
+  </Card>
+  <Card
+    title="Reportes Avanzados"
+    icon="chart-line"
+    href="/caracteristicas/reportes"
+  >
+    Generación de reportes personalizados con analytics en tiempo real
+  </Card>
+  <Card
+    title="Chatbot IA"
+    icon="robot"
+    href="/caracteristicas/chatbot-ia"
+  >
+    Asistente inteligente con acceso directo a tu base de datos
+  </Card>
+</CardGroup>
+
+## Stack Tecnológico
+
+Optacost está construido con tecnologías modernas y robustas:
+
+- **Frontend**: Next.js 14 + React 18 + TypeScript
+- **Backend**: Supabase (PostgreSQL)
+- **UI**: Shadcn/ui + Tailwind CSS
+- **Estado**: Recoil + TanStack React Query
+- **IA**: OpenAI GPT-5 con Model Context Protocol (MCP)
+
+## Arquitectura Multi-tenant
+
+Optacost utiliza una arquitectura multi-tenant basada en subdominios:
+
+```
+https://{cliente}.app.optacost.com
+```
+
+Cada cliente tiene:
+- **Schema de base de datos dedicado**
+- **Datos completamente aislados**
+- **Configuraciones personalizadas**
+- **Roles y permisos independientes**
+
+<Info>
+Aprende más sobre la arquitectura multi-tenant en la [sección de arquitectura](/arquitectura/multi-tenancy).
+</Info>
+
+## Roles de Usuario
+
+Optacost soporta 4 niveles de acceso:
+
+| Rol | Nivel | Permisos |
+|-----|-------|----------|
+| **SuperAdmin** | 9 | Control total de la plataforma |
+| **Admin** | 1 | Gestión completa del cliente |
+| **Editor** | 3 | Edición limitada de datos |
+| **User** | 2 | Solo lectura |
+
+## Casos de Uso
+
+Optacost es ideal para:
+
+<AccordionGroup>
+  <Accordion title="Laboratorios Clínicos">
+    Gestiona costos de prácticas, suministros y genera reportes de rentabilidad
+  </Accordion>
+  <Accordion title="Centros de Diagnóstico">
+    Optimiza precios de estudios y controla inventario de reactivos
+  </Accordion>
+  <Accordion title="Hospitales">
+    Análisis de costos por departamento y optimización de compras
+  </Accordion>
+  <Accordion title="Redes de Laboratorios">
+    Gestión centralizada multi-sede con reportes consolidados
+  </Accordion>
+</AccordionGroup>
+
+## Próximos Pasos
+
+<CardGroup cols={2}>
+  <Card
+    title="Inicio Rápido"
+    icon="rocket"
+    href="/introduccion/inicio-rapido"
+  >
+    Configura tu cuenta y empieza a usar Optacost
+  </Card>
+  <Card
+    title="API Reference"
+    icon="code"
+    href="/api-reference/introduccion"
+  >
+    Explora la documentación de la API
+  </Card>
+</CardGroup>

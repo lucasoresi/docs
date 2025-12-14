@@ -1,0 +1,182 @@
+---
+title: 'Integraciones'
+description: 'Conecta Optacost con sistemas externos y automatiza tu flujo de trabajo'
+---
+
+## Descripción General
+
+El módulo de **Integraciones** permite conectar Optacost con otros sistemas y servicios para automatizar procesos y sincronizar información.
+
+## Integraciones Disponibles
+
+<CardGroup cols={2}>
+  <Card title="Supabase" icon="database">
+    Base de datos en tiempo real con autenticación
+  </Card>
+  <Card title="OpenAI" icon="brain">
+    Chatbot inteligente con GPT-4o
+  </Card>
+  <Card title="AppSheet" icon="table">
+    Sincronización de datos legacy
+  </Card>
+  <Card title="APIs REST" icon="code">
+    Integración personalizada vía API
+  </Card>
+</CardGroup>
+
+## Supabase
+
+### Características Integradas
+
+Optacost utiliza Supabase como backend principal:
+
+- **Base de datos PostgreSQL**: Almacenamiento seguro y escalable
+- **Autenticación**: Sistema completo de usuarios y permisos
+- **Storage**: Almacenamiento de archivos y documentos
+- **Realtime**: Actualizaciones en tiempo real
+- **Edge Functions**: Funciones serverless para tareas automatizadas
+
+### Row Level Security (RLS)
+
+<Note>
+Todos los datos están protegidos con políticas de seguridad a nivel de fila, garantizando aislamiento entre laboratorios
+</Note>
+
+```sql
+-- Ejemplo de política RLS
+CREATE POLICY "Users can only see their lab's data"
+ON practices
+FOR SELECT
+USING (lab_id = auth.uid());
+```
+
+## OpenAI GPT-4o
+
+### Chatbot Inteligente
+
+La integración con OpenAI permite:
+
+<Accordion title="Consultas en Lenguaje Natural">
+  Pregunta sobre tus datos usando lenguaje cotidiano:
+
+  *"¿Cuánto gastamos en suministros el mes pasado?"*
+
+  *"Muéstrame las prácticas más rentables"*
+</Accordion>
+
+<Accordion title="Análisis Inteligente">
+  El chatbot puede analizar tendencias y patrones en tus datos
+</Accordion>
+
+<Accordion title="Asistencia Contextual">
+  Obtén ayuda sobre cómo usar el sistema directamente desde el chat
+</Accordion>
+
+### Configuración
+
+Para activar el chatbot:
+
+<Steps>
+  <Step title="Obtén API Key">
+    Crea una cuenta en OpenAI y genera una API key
+  </Step>
+  <Step title="Configura la Key">
+    Agrega la key en las variables de entorno
+    ```bash
+    OPENAI_API_KEY=sk-...
+    ```
+  </Step>
+  <Step title="Activa el Chatbot">
+    El botón del chatbot aparecerá automáticamente
+  </Step>
+</Steps>
+
+<Warning>
+Las API keys de OpenAI tienen costo por uso. Monitorea tu consumo en el dashboard de OpenAI
+</Warning>
+
+## AppSheet (Legacy)
+
+### Sincronización de Datos Antiguos
+
+Si vienes de una implementación anterior con AppSheet:
+
+- Importa datos históricos automáticamente
+- Migra usuarios y configuraciones
+- Mantén compatibilidad durante la transición
+
+```javascript
+// Ejemplo de sincronización
+const syncFromAppSheet = async () => {
+  const legacyData = await fetchAppSheetData();
+  const practices = transformToNewFormat(legacyData);
+  await supabase.from('practices').insert(practices);
+}
+```
+
+## API REST de Optacost
+
+### Integración Personalizada
+
+Conecta tus propios sistemas usando nuestra API:
+
+```bash
+# Autenticación
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "usuario@lab.com",
+  "password": "***"
+}
+```
+
+```bash
+# Obtener prácticas
+GET /api/practices?month=2024-12
+Authorization: Bearer <token>
+```
+
+### Endpoints Principales
+
+<CardGroup cols={2}>
+  <Card title="Autenticación" icon="key" href="/api-reference/autenticacion">
+    Login, logout, refresh token
+  </Card>
+  <Card title="Prácticas" icon="flask" href="/api-reference/practicas/listar-practicas">
+    CRUD completo de prácticas
+  </Card>
+  <Card title="Suministros" icon="boxes-stacked" href="/api-reference/suministros/listar-suministros">
+    Gestión de inventario
+  </Card>
+  <Card title="Reportes" icon="chart-bar" href="/api-reference/reportes/generar-reporte">
+    Generación de reportes
+  </Card>
+</CardGroup>
+
+## Webhooks
+
+<Tip>
+Próximamente: Configura webhooks para recibir notificaciones en tiempo real sobre eventos importantes
+</Tip>
+
+Eventos disponibles:
+- Nueva práctica creada
+- Stock bajo de suministro
+- Reporte generado
+- Usuario creado
+
+## Integraciones Futuras
+
+Estamos trabajando en integrar con:
+
+- **Sistemas de facturación electrónica** (AFIP)
+- **Obras sociales** (consulta automática de autorizaciones)
+- **Laboratorios de referencia** (envío automático de derivaciones)
+- **WhatsApp Business** (notificaciones a pacientes)
+
+## Siguiente Paso
+
+<Card title="Sistema de Backups" icon="server" href="/caracteristicas/backups">
+  Aprende cómo proteger tus datos con backups automáticos
+</Card>

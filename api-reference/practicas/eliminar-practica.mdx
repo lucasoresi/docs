@@ -1,0 +1,100 @@
+---
+title: 'Eliminar Práctica'
+api: 'DELETE /api/practices/:id'
+description: 'Elimina una práctica del sistema y restaura el stock de suministros'
+---
+
+## Endpoint
+
+```bash
+DELETE /api/practices/:id
+```
+
+## Autenticación
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token obtenido del login
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="id" type="string" required>
+  ID de la práctica a eliminar
+</ParamField>
+
+## Request Example
+
+```bash
+DELETE /api/practices/pract_123
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "message": "Práctica eliminada exitosamente",
+  "id": "pract_123",
+  "stock_restaurado": [
+    {
+      "supply_id": "sup_001",
+      "cantidad": 1,
+      "nuevo_stock": 251
+    },
+    {
+      "supply_id": "sup_015",
+      "cantidad": 2,
+      "nuevo_stock": 148
+    }
+  ]
+}
+```
+
+## Efecto en el Stock
+
+<Note>
+Al eliminar una práctica, el stock de los suministros utilizados se **restaura automáticamente**.
+</Note>
+
+Por ejemplo:
+- Práctica usó 1 tubo EDTA
+- Al eliminar: stock de tubos EDTA aumenta en 1
+
+## Consideraciones
+
+<Warning>
+Esta acción es **irreversible**. Asegúrate de que realmente quieres eliminar la práctica.
+</Warning>
+
+### Restricciones
+
+No puedes eliminar una práctica si:
+- Ya fue facturada a la obra social
+- Forma parte de un reporte cerrado
+- Tiene más de 90 días de antigüedad (configurable)
+
+En estos casos, considera marcarla como "anulada" en lugar de eliminarla.
+
+## Permisos Requeridos
+
+Solo usuarios con rol **Admin** pueden eliminar prácticas.
+
+## Códigos de Respuesta
+
+| Código | Descripción |
+|--------|-------------|
+| 200 | Práctica eliminada exitosamente |
+| 401 | No autenticado |
+| 403 | Sin permisos para eliminar |
+| 404 | Práctica no encontrada |
+| 409 | Práctica no puede ser eliminada (ya facturada) |
+| 500 | Error del servidor |
+
+## Audit Log
+
+Todas las eliminaciones quedan registradas en el audit log del sistema con:
+- Usuario que eliminó
+- Timestamp
+- Datos de la práctica eliminada
+- Razón (si se proporcionó)

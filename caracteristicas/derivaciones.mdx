@@ -1,0 +1,158 @@
+---
+title: 'Gestión de Derivaciones'
+description: 'Administra estudios enviados a laboratorios externos y controla los costos'
+---
+
+## Descripción General
+
+El módulo de **Derivaciones** te permite gestionar prácticas médicas que se envían a laboratorios externos, controlando costos, tiempos y seguimiento.
+
+## ¿Qué son las Derivaciones?
+
+Las derivaciones son estudios o prácticas que tu laboratorio no realiza internamente y debe enviar a laboratorios de referencia o especializados.
+
+<Card title="Ejemplo de Derivación" icon="hospital">
+  Un paciente solicita un estudio de genética molecular que tu laboratorio no realiza. Derivas el estudio a un laboratorio especializado, mantienes el control del proceso y facturas al paciente.
+</Card>
+
+## Características Principales
+
+<CardGroup cols={2}>
+  <Card title="Control de Envíos" icon="paper-plane">
+    Registra y rastrea cada estudio enviado
+  </Card>
+  <Card title="Gestión de Costos" icon="calculator">
+    Controla el costo de cada laboratorio externo
+  </Card>
+  <Card title="Seguimiento" icon="timeline">
+    Monitorea el estado de cada derivación
+  </Card>
+  <Card title="Facturación" icon="file-invoice-dollar">
+    Calcula automáticamente márgenes y precios
+  </Card>
+</CardGroup>
+
+## Flujo de Trabajo
+
+<Steps>
+  <Step title="Recepción del Paciente">
+    El paciente solicita un estudio que requiere derivación
+  </Step>
+  <Step title="Registro de Derivación">
+    Creas la derivación en el sistema, seleccionando el laboratorio externo
+  </Step>
+  <Step title="Envío de Muestra">
+    Preparas y envías la muestra al laboratorio de referencia
+  </Step>
+  <Step title="Seguimiento">
+    Monitoreas el estado: enviada → en proceso → completada
+  </Step>
+  <Step title="Recepción de Resultados">
+    Recibes los resultados y los entregas al paciente
+  </Step>
+  <Step title="Facturación">
+    Facturas al paciente con el margen configurado
+  </Step>
+</Steps>
+
+## Configuración de Laboratorios Externos
+
+### Agregar Laboratorio de Referencia
+
+Define los laboratorios externos con los que trabajas:
+
+```tsx
+{
+  nombre: "Laboratorio Especializado XYZ",
+  especialidad: "Genética Molecular",
+  contacto: "contacto@labxyz.com",
+  telefono: "+54 11 1234-5678",
+  tiempo_promedio: "5 días",
+  condiciones_pago: "30 días"
+}
+```
+
+### Configurar Estudios Disponibles
+
+Para cada laboratorio externo, configura:
+- Estudios que realizan
+- Costo de cada estudio
+- Tiempo estimado de entrega
+- Requisitos de muestra
+
+## Estados de Derivación
+
+<Accordion title="Pendiente de Envío">
+  La derivación fue registrada pero la muestra aún no se envió
+</Accordion>
+
+<Accordion title="Enviada">
+  La muestra fue enviada al laboratorio externo
+</Accordion>
+
+<Accordion title="En Proceso">
+  El laboratorio externo está procesando el estudio
+</Accordion>
+
+<Accordion title="Completada">
+  Resultados recibidos y entregados al paciente
+</Accordion>
+
+<Accordion title="Cancelada">
+  La derivación fue cancelada por algún motivo
+</Accordion>
+
+## Control de Costos
+
+### Cálculo de Márgenes
+
+El sistema calcula automáticamente:
+
+```tsx
+{
+  costo_laboratorio_externo: 5000,
+  margen_configurado: "40%",
+  precio_venta_sugerido: 7000,
+  ganancia_bruta: 2000
+}
+```
+
+<Warning>
+Asegúrate de configurar correctamente los márgenes para cada laboratorio y tipo de estudio
+</Warning>
+
+## Reportes de Derivaciones
+
+Genera reportes específicos de derivaciones:
+
+- Total de estudios derivados por periodo
+- Costo total de derivaciones
+- Ingresos por derivaciones
+- Laboratorios externos más utilizados
+- Tiempo promedio de entrega
+
+## Alertas y Notificaciones
+
+<Note>
+Configura alertas automáticas para derivaciones que excedan el tiempo esperado
+</Note>
+
+El sistema puede notificarte cuando:
+- Una derivación está pendiente de envío hace más de X días
+- El tiempo de procesamiento excede lo esperado
+- Se recibieron los resultados de un estudio
+- Hay estudios pendientes de facturar
+
+## Integración con Obras Sociales
+
+Las derivaciones se integran automáticamente con el sistema de facturación por obra social:
+
+- Respeta los convenios de cada prestador
+- Calcula el co-pago del paciente si corresponde
+- Genera la factura con el código correcto
+
+## Siguiente Paso
+
+<Card title="Configura Integraciones" icon="plug" href="/caracteristicas/integraciones">
+  Conecta Optacost con sistemas externos y automatiza procesos
+</Card>

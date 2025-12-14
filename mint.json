@@ -1,0 +1,141 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Optacost",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "favicon": "/favicon.svg",
+  "colors": {
+    "primary": "#0D9373",
+    "light": "#07C983",
+    "dark": "#0D9373",
+    "anchors": {
+      "from": "#0D9373",
+      "to": "#07C983"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Soporte",
+      "url": "mailto:soporte@optacost.com"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Ir a la App",
+    "url": "https://app.optacost.com"
+  },
+  "tabs": [
+    {
+      "name": "API Reference",
+      "url": "api-reference"
+    },
+    {
+      "name": "Arquitectura",
+      "url": "arquitectura"
+    },
+    {
+      "name": "Guías",
+      "url": "guias"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "GitHub",
+      "icon": "github",
+      "url": "https://github.com/optacost"
+    },
+    {
+      "name": "Soporte",
+      "icon": "life-ring",
+      "url": "mailto:soporte@optacost.com"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Introducción",
+      "pages": [
+        "introduccion/que-es-optacost",
+        "introduccion/inicio-rapido",
+        "introduccion/autenticacion"
+      ]
+    },
+    {
+      "group": "Características",
+      "pages": [
+        "caracteristicas/dashboard",
+        "caracteristicas/practicas",
+        "caracteristicas/suministros",
+        "caracteristicas/reportes",
+        "caracteristicas/derivaciones",
+        "caracteristicas/integraciones",
+        "caracteristicas/chatbot-ia",
+        "caracteristicas/backups"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": [
+        "api-reference/introduccion",
+        "api-reference/autenticacion"
+      ]
+    },
+    {
+      "group": "Prácticas",
+      "pages": [
+        "api-reference/practicas/listar-practicas",
+        "api-reference/practicas/crear-practica",
+        "api-reference/practicas/actualizar-practica",
+        "api-reference/practicas/eliminar-practica"
+      ]
+    },
+    {
+      "group": "Suministros",
+      "pages": [
+        "api-reference/suministros/listar-suministros",
+        "api-reference/suministros/crear-suministro",
+        "api-reference/suministros/actualizar-suministro",
+        "api-reference/suministros/eliminar-suministro"
+      ]
+    },
+    {
+      "group": "Reportes",
+      "pages": [
+        "api-reference/reportes/generar-reporte",
+        "api-reference/reportes/exportar-reporte"
+      ]
+    },
+    {
+      "group": "Chatbot",
+      "pages": [
+        "api-reference/chatbot/enviar-mensaje",
+        "api-reference/chatbot/historial"
+      ]
+    },
+    {
+      "group": "Arquitectura",
+      "pages": [
+        "arquitectura/multi-tenancy",
+        "arquitectura/base-de-datos",
+        "arquitectura/roles-y-permisos",
+        "arquitectura/integracion-openai"
+      ]
+    },
+    {
+      "group": "Guías",
+      "pages": [
+        "guias/configurar-integracion",
+        "guias/crear-reportes-personalizados",
+        "guias/gestionar-usuarios",
+        "guias/importar-datos",
+        "guias/usar-chatbot"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "website": "https://optacost.com"
+  },
+  "search": {
+    "prompt": "Buscar en la documentación..."
+  }
+}

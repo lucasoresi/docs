@@ -1,0 +1,243 @@
+---
+title: Dashboard
+description: Panel de control con métricas y analytics en tiempo real
+---
+
+## Panel de Control Principal
+
+El **Dashboard** es la vista principal de Optacost, diseñada para darte una visión completa del estado de tu laboratorio en tiempo real.
+
+## Métricas Principales
+
+### KPIs Clave
+
+<CardGroup cols={3}>
+  <Card title="Prácticas Activas" icon="flask">
+    Total de procedimientos médicos configurados y disponibles
+  </Card>
+  <Card title="Suministros en Stock" icon="box">
+    Cantidad de suministros activos en inventario
+  </Card>
+  <Card title="Costo Total Mensual" icon="dollar-sign">
+    Suma de costos de prácticas del período actual
+  </Card>
+  <Card title="Usuarios Activos" icon="users">
+    Personal con acceso a la plataforma
+  </Card>
+  <Card title="Integraciones" icon="plug">
+    Conexiones activas con sistemas externos
+  </Card>
+  <Card title="Reportes Generados" icon="chart-bar">
+    Total de reportes creados este mes
+  </Card>
+</CardGroup>
+
+## Gráficos y Visualizaciones
+
+### Evolución de Costos
+
+Gráfico de línea que muestra la evolución temporal de costos:
+
+- **Período**: Últimos 12 meses por defecto
+- **Filtros**: Por laboratorio, práctica o suministro
+- **Comparativa**: Mes actual vs mes anterior
+
+```typescript
+// Ejemplo de datos del gráfico
+{
+  labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+  datasets: [{
+    label: 'Costo Total',
+    data: [45000, 52000, 48000, 51000, 55000, 53000]
+  }]
+}
+```
+
+### Top Prácticas por Costo
+
+Ranking de las prácticas más costosas:
+
+| Posición | Práctica | Código | Costo Unitario | Frecuencia Mensual |
+|----------|----------|--------|----------------|-------------------|
+| 1 | Resonancia Magnética | RES001 | $12,500 | 45 estudios |
+| 2 | Tomografía Computada | TAC001 | $8,900 | 78 estudios |
+| 3 | Panel Metabólico Completo | LAB045 | $3,200 | 234 estudios |
+
+### Consumo de Suministros
+
+Gráfico de barras con los suministros más consumidos:
+
+- **Vista**: Diaria, semanal o mensual
+- **Alertas**: Suministros cerca del stock mínimo
+- **Tendencias**: Variación vs período anterior
+
+## Filtros Globales
+
+### Selección de Período
+
+<Tabs>
+  <Tab title="Rápidos">
+    - Hoy
+    - Esta semana
+    - Este mes
+    - Último trimestre
+    - Este año
+  </Tab>
+  <Tab title="Personalizado">
+    Selector de rango de fechas con calendario visual
+
+    ```typescript
+    // Formato de fechas
+    {
+      desde: "2024-01-01",
+      hasta: "2024-12-31"
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### Filtros Avanzados
+
+<AccordionGroup>
+  <Accordion title="Por Laboratorio">
+    Filtra datos por sede o laboratorio específico
+  </Accordion>
+  <Accordion title="Por Tipo de Práctica">
+    Agrupa por especialidad (Laboratorio, Imágenes, etc.)
+  </Accordion>
+  <Accordion title="Por Rango de Costos">
+    Establece límites mínimos y máximos de costos
+  </Accordion>
+</AccordionGroup>
+
+## Widgets Personalizables
+
+### Organización del Dashboard
+
+El dashboard permite personalizar la disposición de widgets:
+
+<Steps>
+  <Step title="Activar modo edición">
+    Click en el ícono de configuración (⚙️) → "Personalizar Dashboard"
+  </Step>
+  <Step title="Reorganizar widgets">
+    Arrastra y suelta los widgets en la posición deseada
+  </Step>
+  <Step title="Mostrar/Ocultar">
+    Marca o desmarca widgets según tus necesidades
+  </Step>
+  <Step title="Guardar configuración">
+    Los cambios se guardan automáticamente por usuario
+  </Step>
+</Steps>
+
+### Widgets Disponibles
+
+- **Métricas Financieras**: Costos, ingresos, márgenes
+- **Actividad Reciente**: Últimas acciones en el sistema
+- **Alertas y Notificaciones**: Avisos importantes
+- **Gráficos de Tendencias**: Evolución temporal de KPIs
+- **Top Rankings**: Prácticas y suministros destacados
+- **Estado de Integraciones**: Conexiones externas activas
+
+## Acciones Rápidas
+
+### Atajos desde el Dashboard
+
+<CardGroup cols={2}>
+  <Card title="Nueva Práctica" icon="plus" href="/caracteristicas/practicas">
+    Crear procedimiento médico rápidamente
+  </Card>
+  <Card title="Nuevo Suministro" icon="box-open" href="/caracteristicas/suministros">
+    Agregar suministro al inventario
+  </Card>
+  <Card title="Generar Reporte" icon="file-chart-column" href="/caracteristicas/reportes">
+    Crear reporte instantáneo del período
+  </Card>
+  <Card title="Ver Backups" icon="database" href="/caracteristicas/backups">
+    Acceder a respaldos de datos
+  </Card>
+</CardGroup>
+
+## Chatbot Integrado
+
+El chatbot IA está disponible desde el dashboard:
+
+<Tip>
+Click en el ícono del chatbot (💬) en la esquina inferior derecha para hacer consultas sobre tus datos.
+</Tip>
+
+### Consultas Frecuentes al Chatbot
+
+```
+"¿Cuál fue el costo total del mes pasado?"
+"Muéstrame las 10 prácticas más realizadas"
+"¿Qué suministros necesito reponer?"
+"Comparativa de costos: este mes vs mes anterior"
+```
+
+## Exportación de Datos
+
+### Exportar Dashboard
+
+Puedes exportar los datos visualizados:
+
+- **PDF**: Vista completa del dashboard con gráficos
+- **Excel**: Datos tabulares para análisis
+- **Imagen**: Capturas de gráficos individuales
+
+```typescript
+// Opciones de exportación
+{
+  formato: "pdf" | "excel" | "png",
+  incluir: ["metricas", "graficos", "tablas"],
+  periodo: { desde: "2024-01-01", hasta: "2024-12-31" }
+}
+```
+
+## Actualizaciones en Tiempo Real
+
+El dashboard se actualiza automáticamente:
+
+- **Datos en vivo**: Refresh cada 30 segundos
+- **Notificaciones**: Alertas instantáneas
+- **Colaboración**: Cambios de otros usuarios en tiempo real
+
+<Info>
+Los datos se sincronizan automáticamente. No necesitas recargar la página.
+</Info>
+
+## Responsive Design
+
+El dashboard se adapta a cualquier dispositivo:
+
+<Tabs>
+  <Tab title="Desktop">
+    Vista completa con todos los widgets y gráficos
+  </Tab>
+  <Tab title="Tablet">
+    Widgets reorganizados en 2 columnas
+  </Tab>
+  <Tab title="Mobile">
+    Vista simplificada con scroll vertical y métricas prioritarias
+  </Tab>
+</Tabs>
+
+## Próximos Pasos
+
+<CardGroup cols={2}>
+  <Card
+    title="Explorar Prácticas"
+    icon="flask"
+    href="/caracteristicas/practicas"
+  >
+    Gestiona procedimientos médicos
+  </Card>
+  <Card
+    title="Ver Reportes"
+    icon="chart-line"
+    href="/caracteristicas/reportes"
+  >
+    Genera análisis detallados
+  </Card>
+</CardGroup>

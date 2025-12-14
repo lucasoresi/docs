@@ -1,0 +1,226 @@
+---
+title: Inicio Rápido
+description: Configura tu cuenta de Optacost en minutos
+---
+
+## Bienvenido a Optacost
+
+Esta guía te ayudará a configurar tu cuenta y empezar a usar Optacost rápidamente.
+
+## 1. Acceso a la Plataforma
+
+Optacost utiliza subdominios para cada cliente:
+
+```
+https://{tu-laboratorio}.app.optacost.com
+```
+
+<Info>
+Tu subdominio será proporcionado por el equipo de Optacost al crear tu cuenta.
+</Info>
+
+## 2. Primer Inicio de Sesión
+
+### Credenciales Iniciales
+
+Recibirás un correo de bienvenida con:
+- **Subdominio** de tu organización
+- **Usuario** administrador
+- **Contraseña** temporal
+
+### Cambiar Contraseña
+
+<Steps>
+  <Step title="Inicia sesión con credenciales temporales">
+    Ingresa a `https://{tu-subdominio}.app.optacost.com`
+  </Step>
+  <Step title="Navega a tu perfil">
+    Click en tu avatar (esquina superior derecha) → "Perfil"
+  </Step>
+  <Step title="Actualiza tu contraseña">
+    Sección "Seguridad" → "Cambiar contraseña"
+  </Step>
+</Steps>
+
+<Warning>
+Por seguridad, cambia tu contraseña temporal inmediatamente después del primer inicio de sesión.
+</Warning>
+
+## 3. Configuración Inicial
+
+### Dashboard Principal
+
+Al iniciar sesión verás el dashboard con:
+
+- **Métricas clave**: Costos, prácticas activas, suministros
+- **Gráficos**: Tendencias de costos y consumo
+- **Accesos rápidos**: A las principales funcionalidades
+
+### Navegación Principal
+
+El menú lateral contiene las secciones principales:
+
+| Sección | Descripción |
+|---------|-------------|
+| **Dashboard** | Vista general y analytics |
+| **Prácticas** | Gestión de procedimientos médicos |
+| **Suministros** | Control de inventario |
+| **Reportes** | Generación de informes |
+| **Derivaciones** | Cálculos y convenciones |
+| **Integraciones** | Conexiones externas |
+| **Usuarios** | Gestión de accesos (Admin) |
+| **Backups** | Respaldos de datos (Admin) |
+
+## 4. Configurar tu Primer Laboratorio
+
+<Steps>
+  <Step title="Agregar ubicación">
+    Menú → "Configuración" → "Laboratorios" → "Nuevo Laboratorio"
+  </Step>
+  <Step title="Completar información">
+    - Nombre del laboratorio
+    - Dirección
+    - Sede principal
+  </Step>
+  <Step title="Guardar cambios">
+    Click en "Guardar" para crear tu laboratorio
+  </Step>
+</Steps>
+
+## 5. Crear tu Primera Práctica
+
+<CodeGroup>
+
+```bash Manual
+1. Navega a "Prácticas"
+2. Click en "Nueva Práctica"
+3. Completa los campos:
+   - Código
+   - Nombre
+   - Precio
+   - Laboratorio
+4. Guarda la práctica
+```
+
+```json Ejemplo
+{
+  "codigo": "LAB001",
+  "nombre": "Hemograma Completo",
+  "precio": 1500.00,
+  "laboratorio_id": 1,
+  "activo": true
+}
+```
+
+</CodeGroup>
+
+## 6. Agregar Suministros
+
+Los suministros se asocian a las prácticas:
+
+<Steps>
+  <Step title="Ir a Suministros">
+    Menú → "Suministros" → "Nuevo Suministro"
+  </Step>
+  <Step title="Datos del suministro">
+    - Código único
+    - Nombre descriptivo
+    - Costo unitario
+    - Unidad de medida
+  </Step>
+  <Step title="Asociar a práctica">
+    En la vista de la práctica → "Suministros" → "Asignar Suministro"
+  </Step>
+</Steps>
+
+## 7. Generar tu Primer Reporte
+
+<Steps>
+  <Step title="Acceder a Reportes">
+    Menú → "Reportes" → "Nuevo Reporte"
+  </Step>
+  <Step title="Seleccionar parámetros">
+    - Período de análisis
+    - Laboratorio(s)
+    - Tipo de reporte
+  </Step>
+  <Step title="Generar y exportar">
+    Click en "Generar" → Descargar en Excel/PDF
+  </Step>
+</Steps>
+
+## 8. Usar el Chatbot IA
+
+El chatbot inteligente puede ayudarte con:
+
+- Consultas sobre datos
+- Análisis de costos
+- Recomendaciones
+- Búsqueda de información
+
+<Tip>
+Prueba preguntarle: "¿Cuáles son las 5 prácticas más costosas este mes?"
+</Tip>
+
+### Ejemplo de uso
+
+```
+Usuario: ¿Cuál es el costo promedio de los suministros de hemogramas?
+
+Chatbot: Basándome en los datos actuales, el costo promedio de
+suministros para hemogramas es de $450.25 por estudio. Esto incluye:
+- Reactivos: $320.00
+- Tubos y consumibles: $80.25
+- Material descartable: $50.00
+```
+
+## 9. Invitar Usuarios
+
+Solo usuarios con rol **Admin** pueden invitar a otros:
+
+<Steps>
+  <Step title="Ir a Usuarios">
+    Menú → "Usuarios" → "Invitar Usuario"
+  </Step>
+  <Step title="Completar datos">
+    - Email del usuario
+    - Rol asignado
+    - Permisos específicos
+  </Step>
+  <Step title="Enviar invitación">
+    El usuario recibirá un email con instrucciones
+  </Step>
+</Steps>
+
+## Próximos Pasos
+
+<CardGroup cols={2}>
+  <Card
+    title="Explorar Características"
+    icon="compass"
+    href="/caracteristicas/dashboard"
+  >
+    Conoce todas las funcionalidades de Optacost
+  </Card>
+  <Card
+    title="Configurar Integraciones"
+    icon="plug"
+    href="/guias/configurar-integracion"
+  >
+    Conecta sistemas externos
+  </Card>
+  <Card
+    title="API Reference"
+    icon="code"
+    href="/api-reference/introduccion"
+  >
+    Integra Optacost con tus sistemas
+  </Card>
+  <Card
+    title="Soporte"
+    icon="life-ring"
+    href="mailto:soporte@optacost.com"
+  >
+    ¿Necesitas ayuda? Contáctanos
+  </Card>
+</CardGroup>

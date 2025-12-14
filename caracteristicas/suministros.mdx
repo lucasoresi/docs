@@ -1,0 +1,103 @@
+---
+title: 'Gestión de Suministros'
+description: 'Sistema completo de administración de insumos médicos y control de inventario'
+---
+
+## Descripción General
+
+El módulo de **Suministros** te permite gestionar todo el inventario de insumos médicos de tu laboratorio, desde el stock hasta los precios y proveedores.
+
+## Características Principales
+
+<CardGroup cols={2}>
+  <Card title="Inventario en Tiempo Real" icon="boxes-stacked">
+    Visualiza el stock disponible de todos tus suministros
+  </Card>
+  <Card title="Control de Precios" icon="dollar-sign">
+    Actualización automática de precios desde proveedores
+  </Card>
+  <Card title="Alertas de Stock" icon="bell">
+    Notificaciones cuando el inventario está bajo
+  </Card>
+  <Card title="Historial de Consumo" icon="chart-line">
+    Análisis de consumo por periodo
+  </Card>
+</CardGroup>
+
+## Gestión de Inventario
+
+### Visualización de Stock
+
+Accede a una vista completa de todo tu inventario con:
+- Stock actual disponible
+- Stock mínimo configurado
+- Alertas de reposición
+- Fecha de última actualización
+
+```tsx
+// Ejemplo de estructura de datos de suministro
+{
+  id: "suministro_123",
+  nombre: "Tubo de ensayo 5ml",
+  stock_actual: 250,
+  stock_minimo: 100,
+  precio_unitario: 0.50,
+  proveedor: "Proveedor Medical SA"
+}
+```
+
+### Asignación a Prácticas
+
+Asigna suministros necesarios para cada tipo de práctica:
+
+<Steps>
+  <Step title="Selecciona la práctica">
+    Elige la práctica médica desde el panel
+  </Step>
+  <Step title="Asigna suministros">
+    Selecciona los insumos necesarios y cantidades
+  </Step>
+  <Step title="Guarda la configuración">
+    El sistema calculará automáticamente los costos
+  </Step>
+</Steps>
+
+## Actualización de Precios
+
+<Note>
+Los precios se actualizan automáticamente desde tus proveedores configurados
+</Note>
+
+El sistema puede:
+- Importar listas de precios de proveedores
+- Actualizar precios masivamente
+- Mantener historial de cambios de precios
+- Comparar precios entre proveedores
+
+## Gestión de Proveedores
+
+### Agregar Proveedor
+
+Configura tus proveedores externos:
+- Nombre y datos de contacto
+- Productos que suministran
+- Condiciones comerciales
+- Tiempos de entrega
+
+## Reportes de Suministros
+
+Genera reportes detallados:
+- Consumo por periodo
+- Suministros más utilizados
+- Proyección de necesidades
+- Análisis de costos
+
+<Tip>
+Usa los reportes mensuales para optimizar tu inventario y reducir costos
+</Tip>
+
+## Siguiente Paso
+
+<Card title="Explora Reportes" icon="chart-bar" href="/caracteristicas/reportes">
+  Aprende a generar reportes completos de consumo y costos
+</Card>

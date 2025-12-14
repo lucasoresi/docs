@@ -1,0 +1,183 @@
+---
+title: 'Enviar Mensaje al Chatbot'
+api: 'POST /api/chat'
+description: 'Envía un mensaje al asistente con IA y recibe respuestas inteligentes'
+---
+
+## Descripción General
+
+El endpoint de chat permite interactuar con el asistente de IA que puede:
+- Responder preguntas sobre tus datos
+- Generar análisis en lenguaje natural
+- Ejecutar consultas SQL automáticamente
+- Proporcionar insights sobre tu operación
+
+## Endpoint
+
+```bash
+POST /api/chat
+```
+
+## Body Parameters
+
+<ParamField body="message" type="string" required>
+  Mensaje o pregunta del usuario
+</ParamField>
+
+<ParamField body="conversation_id" type="string">
+  ID de conversación para mantener contexto
+</ParamField>
+
+<ParamField body="context" type="object">
+  Contexto adicional opcional
+
+  <Expandable title="context">
+    <ParamField body="lab_id" type="string">
+      ID del laboratorio (automático del usuario)
+    </ParamField>
+
+    <ParamField body="current_page" type="string">
+      Página actual del usuario para contexto
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Request Example
+
+```bash
+POST /api/chat
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "message": "¿Cuánto gastamos en suministros el mes pasado?",
+  "conversation_id": "conv_789",
+  "context": {
+    "current_page": "dashboard"
+  }
+}
+```
+
+## Response
+
+<ResponseField name="response" type="string">
+  Respuesta del asistente en lenguaje natural
+</ResponseField>
+
+<ResponseField name="conversation_id" type="string">
+  ID de la conversación (úsalo en próximos mensajes)
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Datos estructurados si corresponde
+
+  <Expandable title="data">
+    <ResponseField name="sql_query" type="string">
+      Query SQL ejecutada (si aplicable)
+    </ResponseField>
+
+    <ResponseField name="results" type="array">
+      Resultados de la consulta
+    </ResponseField>
+
+    <ResponseField name="visualization" type="object">
+      Datos para gráficos si corresponde
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="suggestions" type="array">
+  Preguntas sugeridas para continuar
+</ResponseField>
+
+### Example Response
+
+```json
+{
+  "response": "El mes pasado gastaste $36,250 en suministros. Esto representa un aumento del 12% comparado con el mes anterior. Los suministros más consumidos fueron:\n\n1. Tubos EDTA: $8,500\n2. Guantes: $4,200\n3. Reactivos: $12,800",
+  "conversation_id": "conv_789",
+  "data": {
+    "sql_query": "SELECT SUM(costo_suministros) FROM practices WHERE fecha >= '2024-11-01' AND fecha < '2024-12-01'",
+    "results": [
+      { "total": 36250 }
+    ],
+    "top_supplies": [
+      { "nombre": "Tubos EDTA", "costo": 8500 },
+      { "nombre": "Guantes", "costo": 4200 },
+      { "nombre": "Reactivos", "costo": 12800 }
+    ]
+  },
+  "suggestions": [
+    "¿Cuál fue el margen de ganancia?",
+    "¿Qué prácticas fueron las más rentables?",
+    "Muéstrame un gráfico de consumo mensual"
+  ]
+}
+```
+
+## Capacidades del Chatbot
+
+<CardGroup cols={2}>
+  <Card title="Consultas de Datos" icon="database">
+    Pregunta sobre prácticas, costos, ingresos, etc.
+  </Card>
+  <Card title="Análisis" icon="chart-line">
+    Obtén insights y tendencias automáticamente
+  </Card>
+  <Card title="Comparativas" icon="scale-balanced">
+    Compara periodos, obras sociales, prácticas
+  </Card>
+  <Card title="Asistencia" icon="circle-question">
+    Ayuda sobre cómo usar el sistema
+  </Card>
+</CardGroup>
+
+## Ejemplos de Preguntas
+
+<AccordionGroup>
+  <Accordion title="Consultas Financieras">
+    - "¿Cuál fue mi facturación total este mes?"
+    - "¿Cuánto gané con OSDE en diciembre?"
+    - "Muéstrame las prácticas más rentables"
+  </Accordion>
+
+  <Accordion title="Análisis de Consumo">
+    - "¿Qué suministros estoy consumiendo más?"
+    - "¿Tengo algún suministro con stock bajo?"
+    - "¿Cuánto gasté en reactivos este año?"
+  </Accordion>
+
+  <Accordion title="Reportes">
+    - "Dame un resumen del mes"
+    - "Compara este mes con el anterior"
+    - "¿Cuántas prácticas hice por día en promedio?"
+  </Accordion>
+
+  <Accordion title="Asistencia">
+    - "¿Cómo creo una nueva práctica?"
+    - "¿Cómo actualizo los precios de suministros?"
+    - "¿Puedo exportar mis datos a Excel?"
+  </Accordion>
+</AccordionGroup>
+
+## Seguridad
+
+<Note>
+El chatbot solo puede acceder a datos del laboratorio del usuario autenticado (Row Level Security)
+</Note>
+
+## Límites
+
+- Máximo 10 mensajes por minuto
+- Mensajes de hasta 1000 caracteres
+- Contexto de conversación limitado a últimos 10 mensajes
+
+## Códigos de Respuesta
+
+| Código | Descripción |
+|--------|-------------|
+| 200 | Respuesta exitosa |
+| 400 | Mensaje inválido |
+| 401 | No autenticado |
+| 429 | Rate limit excedido |
+| 500 | Error del servidor |

@@ -1,0 +1,364 @@
+---
+title: 'Gestionar Usuarios'
+description: 'Administra usuarios, roles y permisos en tu laboratorio'
+icon: 'users'
+---
+
+## Introducción
+
+Como administrador, puedes gestionar quién tiene acceso a Optacost y qué puede hacer cada persona.
+
+## Agregar un Nuevo Usuario
+
+<Steps>
+  <Step title="Accede a Usuarios">
+    En el menú principal → Usuarios
+  </Step>
+
+  <Step title="Click en Agregar Usuario">
+    Botón "+ Nuevo Usuario" en la esquina superior derecha
+  </Step>
+
+  <Step title="Completa los datos">
+    **Información requerida:**
+    - Nombre completo
+    - Email (será su usuario de login)
+    - Rol (Admin, User o Viewer)
+    - Contraseña temporal
+
+    ```json
+    {
+      "full_name": "María González",
+      "email": "maria@tulab.com",
+      "role": "user",
+      "temp_password": "TempPass123!"
+    }
+    ```
+  </Step>
+
+  <Step title="Enviar invitación">
+    El usuario recibirá un email con:
+    - Link de acceso
+    - Contraseña temporal
+    - Instrucciones para cambiar contraseña
+  </Step>
+</Steps>
+
+<Note>
+El usuario DEBE cambiar la contraseña temporal en su primer login
+</Note>
+
+## Roles y Permisos
+
+Revisa la [documentación completa de roles](/arquitectura/roles-y-permisos) para entender cada nivel.
+
+### Resumen Rápido
+
+<Tabs>
+  <Tab title="Admin">
+    **Puede hacer TODO:**
+    - Gestionar usuarios
+    - Configurar el sistema
+    - Editar/eliminar cualquier dato
+    - Ver reportes financieros
+    - Configurar integraciones
+    - Gestionar backups
+
+    **Ideal para:** Dueño del laboratorio, gerente
+  </Tab>
+
+  <Tab title="User">
+    **Operación diaria:**
+    - Crear y editar prácticas
+    - Ver y agregar suministros
+    - Generar reportes
+    - Usar el chatbot
+
+    **NO puede:**
+    - Eliminar prácticas
+    - Cambiar precios de suministros
+    - Gestionar usuarios
+    - Modificar configuración
+
+    **Ideal para:** Técnicos, bioquímicos, operadores
+  </Tab>
+
+  <Tab title="Viewer">
+    **Solo lectura:**
+    - Ver prácticas
+    - Ver inventario
+    - Ver reportes
+
+    **NO puede modificar NADA**
+
+    **Ideal para:** Contadores, auditores, consultores externos
+  </Tab>
+</Tabs>
+
+## Editar un Usuario
+
+### Cambiar Rol
+
+<Steps>
+  <Step title="Ve a la lista de usuarios">
+    Usuarios → Todos los usuarios
+  </Step>
+
+  <Step title="Encuentra al usuario">
+    Usa el buscador o scroll
+  </Step>
+
+  <Step title="Click en editar">
+    Icono de lápiz en la fila del usuario
+  </Step>
+
+  <Step title="Cambia el rol">
+    Selecciona el nuevo rol del desplegable
+  </Step>
+
+  <Step title="Guarda">
+    El cambio es inmediato
+  </Step>
+</Steps>
+
+<Warning>
+El cambio de rol afecta inmediatamente. Si el usuario está conectado, verá los cambios al recargar la página.
+</Warning>
+
+### Cambiar Contraseña
+
+Si un usuario olvidó su contraseña:
+
+<Tabs>
+  <Tab title="El usuario puede resetearla">
+    1. En la pantalla de login, click "¿Olvidaste tu contraseña?"
+    2. Ingresa su email
+    3. Recibirá un link para resetear
+    4. Crea nueva contraseña
+  </Tab>
+
+  <Tab title="Tú como admin puedes resetearla">
+    1. Usuarios → Editar usuario
+    2. Click en "Resetear contraseña"
+    3. Genera contraseña temporal
+    4. Compártela con el usuario de forma segura
+  </Tab>
+</Tabs>
+
+## Desactivar / Eliminar Usuario
+
+### Desactivar (Recomendado)
+
+Cuando alguien se va temporalmente:
+
+<Steps>
+  <Step title="Editar usuario">
+    Usuarios → Click en el usuario
+  </Step>
+
+  <Step title="Desactivar">
+    Toggle "Activo" a OFF
+  </Step>
+
+  <Step title="Confirmar">
+    El usuario no podrá hacer login pero su data se mantiene
+  </Step>
+</Steps>
+
+<Tip>
+Preferible a eliminar porque mantienes el historial de quién creó cada práctica
+</Tip>
+
+### Eliminar (Permanente)
+
+<Warning>
+Solo elimina usuarios si estás 100% seguro. Esta acción NO se puede deshacer.
+</Warning>
+
+Antes de eliminar:
+- El usuario NO debe tener prácticas asociadas recientes
+- Debes reasignar o eliminar sus datos
+- Considera desactivar en lugar de eliminar
+
+<Steps>
+  <Step title="Editar usuario">
+    Usuarios → Click en el usuario
+  </Step>
+
+  <Step title="Scroll hasta abajo">
+    Sección "Zona de peligro"
+  </Step>
+
+  <Step title="Eliminar usuario">
+    Click en "Eliminar usuario"
+  </Step>
+
+  <Step title="Confirmar">
+    Escribe el email del usuario para confirmar
+  </Step>
+</Steps>
+
+## Invitaciones Pendientes
+
+### Ver invitaciones enviadas
+
+Usuarios → Pestaña "Invitaciones Pendientes"
+
+Verás:
+- Email invitado
+- Fecha de invitación
+- Estado (enviado, aceptado, expirado)
+
+### Reenviar invitación
+
+Si pasaron más de 48 horas:
+
+1. Click en "Reenviar invitación"
+2. Se genera un nuevo link
+3. Se envía nuevo email
+
+### Cancelar invitación
+
+Si invitaste a alguien por error:
+
+1. Click en "Cancelar invitación"
+2. El link de invitación expira inmediatamente
+
+## Auditoria de Actividad
+
+### Ver qué hizo cada usuario
+
+Usuarios → Click en un usuario → Pestaña "Actividad"
+
+Verás un log de:
+- Prácticas creadas/editadas
+- Cambios en suministros
+- Reportes generados
+- Fecha y hora de cada acción
+
+```json
+{
+  "usuario": "maria@tulab.com",
+  "accion": "practice.created",
+  "detalles": {
+    "practice_id": "pract_123",
+    "tipo": "Hemograma",
+    "timestamp": "2024-12-13T10:30:00Z"
+  }
+}
+```
+
+### Exportar log de actividad
+
+Útil para auditorías:
+
+1. Usuarios → Actividad
+2. Selecciona periodo
+3. Click en "Exportar a CSV"
+
+## Sesiones Activas
+
+### Ver quién está conectado
+
+Dashboard de admin → Sesiones Activas
+
+Muestra:
+- Usuario conectado
+- Última actividad
+- IP de conexión
+- Dispositivo/navegador
+
+### Cerrar sesión remotamente
+
+Si sospechas acceso no autorizado:
+
+1. Encuentra la sesión
+2. Click en "Cerrar sesión"
+3. El usuario será desconectado inmediatamente
+
+## Mejores Prácticas
+
+<AccordionGroup>
+  <Accordion title="1. Principio de Menor Privilegio">
+    Asigna el rol mínimo necesario. No todos necesitan ser admins.
+
+    ✅ Correcto: Técnico = User
+    ❌ Incorrecto: Técnico = Admin "por las dudas"
+  </Accordion>
+
+  <Accordion title="2. Emails Corporativos">
+    Usa emails del dominio del laboratorio:
+
+    ✅ Correcto: maria@tulab.com
+    ❌ Evitar: mariagonzalez123@gmail.com
+  </Accordion>
+
+  <Accordion title="3. Revisión Trimestral">
+    Cada 3 meses:
+    - Revisa la lista de usuarios
+    - Desactiva usuarios inactivos
+    - Verifica que los roles sean apropiados
+  </Accordion>
+
+  <Accordion title="4. Contraseñas Fuertes">
+    Exige contraseñas de:
+    - Mínimo 12 caracteres
+    - Mayúsculas y minúsculas
+    - Números y símbolos
+    - No reutilizar contraseñas
+  </Accordion>
+
+  <Accordion title="5. Onboarding Documentado">
+    Cuando agregas un usuario:
+    - Envía guía de uso
+    - Explica su rol y permisos
+    - Programa una breve capacitación
+    - Asigna un mentor para dudas
+  </Accordion>
+</AccordionGroup>
+
+## Configuración Avanzada
+
+### Permisos Granulares (Próximamente)
+
+En versiones futuras podrás:
+- Crear roles personalizados
+- Definir permisos específicos por módulo
+- Limitar acceso por obra social
+- Restricciones por horario
+
+### Autenticación de Dos Factores (Próximamente)
+
+Mayor seguridad con 2FA:
+- SMS verification
+- Authenticator app (Google Authenticator, Authy)
+- Email verification
+
+## Solución de Problemas
+
+<AccordionGroup>
+  <Accordion title="Usuario no recibe el email de invitación">
+    - Verifica la carpeta de spam
+    - Confirma que el email esté bien escrito
+    - Prueba reenviar la invitación
+    - Verifica con tu proveedor de email (no bloqueado)
+  </Accordion>
+
+  <Accordion title="Usuario no puede cambiar su contraseña">
+    - Link de reseteo expira en 24 horas
+    - Solicita un nuevo link
+    - Verifica que esté usando el link más reciente
+  </Accordion>
+
+  <Accordion title="Usuario ve funciones que no debería">
+    - Verifica su rol en Usuarios → Editar
+    - Pide al usuario que cierre sesión y vuelva a entrar
+    - Limpia caché del navegador
+  </Accordion>
+</AccordionGroup>
+
+## Próximos Pasos
+
+<Card title="Importar Datos" icon="file-import" href="/guias/importar-datos">
+  Aprende a importar datos desde Excel o sistemas anteriores
+</Card>
