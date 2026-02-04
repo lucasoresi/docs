@@ -1,0 +1,108 @@
+---
+title: 'Gestión de Derivaciones'
+description: 'Manual completo para gestionar aranceles, analizar márgenes y comparar costos de laboratorios externos.'
+---
+
+# Módulo de Derivaciones
+
+Este módulo es el centro de control para todas las prácticas que tu laboratorio no procesa internamente. Aquí podrás gestionar los convenios con laboratorios de referencia, auditar la rentabilidad de terciarizar estudios y comparar tu competitividad en el mercado.
+
+> [!NOTE]
+> Una gestión eficiente de derivaciones puede transformar un centro de costos en una unidad de negocio rentable.
+
+---
+
+## 1. Gestión de Aranceles
+
+El corazón de la sección. Aquí administras las listas de precios de tus convenios y derivaciones.
+
+### Tabla de Aranceles Detallada
+
+Cada fila representa un acuerdo comercial o lista de precios.
+
+| Columna | Descripción |
+| :--- | :--- |
+| **Convenio** | Nombre de la entidad (ej. *OSDE*, *Laboratorio Manlab*, *Particular*). |
+| **Región** | Zona geográfica de aplicación (ej. *CABA*, *GBA Sur*). Vital para grandes redes. |
+| **Tipo** | Categoría del arancel. <br/>- **Cápita**: Pago fijo por afiliado.<br/>- **Prestación**: Pago por estudio realizado.<br/>- **Derivación**: Costo que pagas a un tercero. |
+| **Factor** | Multiplicador aplicado a la unidad de valor (UB o similar) si el convenio lo utiliza. |
+| **Métricas** | Semáforo de rentabilidad del convenio:<br/>- **Costo Total**: Suma de costos de insumos/derivación.<br/>- **Bruto**: Total facturado.<br/>- **Margen**: Ganancia neta (Bruto - Costo). |
+
+### Acciones Principales
+
+#### Carga Masiva de Aranceles
+Utiliza el botón **"Cargar Aranceles"** para subir listas de precios completas desde Excel.
+*   **Importante**: El sistema validará códigos de prácticas. Asegúrate de usar el Nomenclador Nacional o códigos propios consistentes.
+
+#### Exportación
+Botón **"Exportar"**: Descarga la vista actual en `.csv` o `.xlsx`. Útil para auditoría externa o para preparar listas de precios para enviar a clientes.
+
+---
+
+## 2. Análisis por Práctica
+
+Esta vista permite realizar una "micro-cirugía" financiera práctica por práctica. Responde a la pregunta: *¿Con qué estudios estoy ganando o perdiendo dinero?*
+
+### Datos Clave e Interpretación
+
+*   **Cant. Facturadas**: Volumen mensual procesado.
+    *   *Análisis*: Un alto volumen con margen bajo requiere atención inmediata.
+*   **Bruto Facturado**: Ingresos totales generados por este estudio.
+*   **% Arancel (Derivación vs Especial)**: Muestra la composición del ingreso.
+*   **Variación Interanual**:
+    *   Compara el volumen actual vs el mismo mes del año anterior.
+    *   **Verde (+)**: Crecimiento de demanda.
+    *   **Rojo (-)**: Caída de demanda. Investigar si se debe a precios altos o pérdida de convenios.
+
+> [!TIP]
+> Ordena la tabla por la columna **"Margen"** de menor a mayor para identificar rápidamente los "vampiros" de rentabilidad (prácticas que dan pérdida).
+
+---
+
+## 3. Análisis por Convenio
+
+Una visión macroscópica de tus acuerdos comerciales. Utiliza la **Ley de Pareto (80/20)** para enfocar tus esfuerzos.
+
+### Visualizaciones
+
+*   **Gráfico de Evolución Mensual**: Barras que muestran la facturación mes a mes. Permite detectar estacionalidad o caídas abruptas en la facturación de una obra social.
+*   **Top Prácticas**: Lista de los estudios más solicitados por ese convenio.
+
+### Switch "Mostrar solo prácticas destacadas"
+*   **Activado**: Filtra la vista para mostrar solo el pequeño grupo de prácticas que generan el 80% de la facturación del convenio.
+*   **Uso Estratégico**: Al negociar un aumento con una Obra Social, no discutas las 500 prácticas del nomenclador. Activa este switch, detecta las 20 prácticas clave y negocia aumentos fuertes en esas específicas.
+
+---
+
+## 4. Análisis por Competencia (Benchmarking)
+
+Esta herramienta te permite comparar tus precios de venta ("Arancel Particular") contra referencias del mercado (como grandes laboratorios de referencia).
+
+### Columnas de Comparativa
+
+*   **Costo Unitario ($)**: Tu costo interno o de derivación. El "piso" de tu precio.
+*   **Arancel Particular ($)**: El precio que cobras a un paciente privado.
+*   **Referencia Mercado ($)**: Precio público de un competidor referente (ej. *Manlab*).
+*   **Diferencia ($ / %)**: La brecha entre tu precio y el mercado.
+
+### Estrategia de Precios (Pricing)
+
+Utiliza la columna **Diferencia** para ajustar tu estrategia:
+
+1.  **Diferencia Negativa (Tu precio < Competencia)**:
+    *   *Estás barato*. Tienes margen para subir precios sin perder competitividad. Es dinero que estás dejando sobre la mesa.
+2.  **Diferencia Muy Positiva (Tu precio >> Competencia)**:
+    *   *Estás caro*. Corres riesgo de perder pacientes que comparan precios. Evalúa si tu servicio premium justifica el sobreprecio o si debes ajustar.
+3.  **Diferencia Cercana a 0**:
+    *   Estás alineado con el mercado.
+
+> [!WARNING]
+> Nunca fijes un precio por debajo de tu **Costo Unitario**. El sistema te alertará con márgenes en rojo si esto sucede.
+
+---
+
+## Resumen de Acciones Mensuales
+
+1.  **Auditoría de Costos**: Ve a *Gestión de Aranceles* y revisa los costos de derivación que hayan cambiado.
+2.  **Limpieza de Prácticas**: En *Análisis por Práctica*, detecta las que tienen margen negativo y decide: ¿dejar de hacerlas, cambiar de derivador o subir precio?
+3.  **Ajuste de Precios**: Usa *Análisis por Competencia* para actualizar tu lista de precios Particular.

@@ -1,0 +1,45 @@
+---
+title: 'Prácticas e Insumos'
+description: 'Gestión del inventario de estudios y materiales del laboratorio.'
+---
+
+# Prácticas (Estudios Médicos)
+
+El corazón operativo del sistema. Aquí se alistan todos los análisis clínicos que el laboratorio ofrece.
+
+## Listado de Prácticas
+Accede desde el menú **Prácticas**.
+
+**Información Detallada:**
+*   **Código**: Nomenclador único (nacional o interno).
+*   **Práctica**: Nombre descriptivo.
+*   **Costo**: Costo unitario calculado (suma de insumos + honorarios + costos indirectos).
+*   **Precio**: Valor de venta sugerido o de lista.
+*   **Margen**: Rentabilidad unitaria.
+*   **Última Actualización**: Fecha crítica para auditoría.
+
+**Funcionalidades:**
+*   **Configuración**: Permite definir componentes del costo de una práctica (qué insumos lleva, tiempos de proceso, etc.).
+*   **Switch "Destacadas"**: Filtra rápidamente las prácticas de mayor rotación.
+
+---
+
+# Insumos (Materiales)
+
+Gestión de stock y costos de reposición. Mantener esta lista actualizada es vital para que el cálculo de costo de las prácticas sea real.
+
+## Listado de Insumos Activos
+Accede desde el menú **Insumos**.
+
+**Columnas:**
+*   **Clase**: Categoría (Reactivos, Descartables, etc.).
+*   **Prácticas**: Contador de en cuántas prácticas se utiliza este insumo. Si actualizas el precio aquí, impactará automáticamente en el costo de todas esas prácticas.
+*   **Proveedor**: Quién suministra el material.
+*   **Precios**:
+    *   *Precio Reposición*: Valor de mercado actual.
+    *   *Precio Últ. Factura*: Lo que pagaste realmente la última vez.
+    *   **Alerta**: Si hay mucha diferencia entre estos dos, el sistema te avisará.
+
+**Acciones Masivas:**
+*   **Intercambio de insumos**: Si cambias de marca de reactivo, usa esta herramienta para reemplazar el Insumo A por el Insumo B en todas las recetas de prácticas a la vez.
+*   **Actualizar precios**: Carga masiva de nuevas listas de proveedores.

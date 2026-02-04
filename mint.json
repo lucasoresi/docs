@@ -27,6 +27,10 @@
   },
   "tabs": [
     {
+      "name": "Onboarding",
+      "url": "onboarding"
+    },
+    {
       "name": "API Reference",
       "url": "api-reference"
     },
@@ -52,6 +56,20 @@
     }
   ],
   "navigation": [
+    {
+      "group": "Onboarding",
+      "pages": [
+        "onboarding/introduccion",
+        "onboarding/navegacion",
+        "onboarding/resumen",
+        "onboarding/derivaciones",
+        "onboarding/obras-sociales",
+        "onboarding/practicas",
+        "onboarding/insumos",
+        "onboarding/gestion-financiera",
+        "onboarding/configuracion"
+      ]
+    },
     {
       "group": "Introducción",
       "pages": [

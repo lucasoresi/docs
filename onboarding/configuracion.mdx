@@ -1,0 +1,39 @@
+---
+title: 'Configuración'
+description: 'Administración de usuarios, seguridad, integraciones y clientes.'
+---
+
+# Configuración del Sistema
+
+Esta sección está restringida generalmente a usuarios administradores. Permite gobernar cómo funciona la plataforma.
+
+## 1. Usuarios del Sistema
+Control de acceso y seguridad.
+*   **Lista de Usuarios**: Muestra nombre, email y rol actual.
+*   **Roles**:
+    *   *SuperAdmin*: Acceso total.
+    *   *Usuario*: Acceso operativo (limitado en configuraciones críticas).
+    *   *Cliente*: Acceso de solo lectura o limitado a sus propios datos.
+*   **Estado**: Activo/Inactivo.
+
+## 2. Backups (Copias de Seguridad)
+Panel crítico para la seguridad de los datos.
+*   **Historial**: Lista de todos los puntos de restauración generados automáticamente o manualmente.
+*   **Datos**: Nombre del archivo (`.sql`), Tamaño y Fecha.
+*   **Acciones**: Descargar copia local o *Restaurar* (volver el sistema a un punto anterior).
+
+## 3. Integraciones
+Conecta Optacost con el resto de tu ecosistema de software.
+
+*   **Importadores de Archivos**:
+    *   *Prácticas/Insumos*: Carga masiva mediante CSV o Excel.
+*   **Sistemas ERP/LIS**:
+    *   *Bejerman ERP*: Conexión nativa.
+    *   *Tango Gestión*: Conector habilitable mediante switch.
+*   **Estado**: Muestra si la conexión está activa ("sincronizando") o detenida.
+
+## 4. Clientes (Multi-Tenant)
+Si gestionas múltiples laboratorios o franquicias desde una sola cuenta maestra.
+*   **Subdominios**: Dirección web de acceso para cada cliente (ej. `cliente1.optacost.tech`).
+*   **Plan**: Nivel de servicio contratado.
+*   **Estado**: Control para suspender o habilitar el acceso a un cliente específico.
